@@ -1,0 +1,26 @@
+{
+  "name": "thats-my-duo",
+  "version": "1.0.0",
+  "description": "AI-powered League of Legends companion for duo synergy analysis",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./packages/*\" dev",
+    "build": "pnpm --recursive --filter \"./packages/*\" build",
+    "test": "pnpm --recursive --filter \"./packages/*\" test",
+    "lint": "pnpm --recursive --filter \"./packages/*\" lint",
+    "clean": "pnpm --recursive --filter \"./packages/*\" clean"
+  },
+  "keywords": [
+    "league-of-legends",
+    "riot-api",
+    "duo-analysis",
+    "aws-bedrock",
+    "gaming-analytics"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
