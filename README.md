@@ -2,10 +2,14 @@
 
 ## 📌 Overview
 
-**That’s My Duo** is an AI-powered League of Legends companion that uncovers how you and your friends *really* play together.  
-By analyzing match history from the Riot API (and possibly supplemental sources like Mobalytics or OP.gg), we highlight champion/role synergies, performance trends, and group dynamics.  
+**That's My Duo** is an AI-powered League of Legends companion that uncovers how you and your friends *really* play together.  
 
-Instead of only showing raw numbers, **That’s My Duo** creates playful, narrative-driven synergy insights using **AWS Bedrock**. Think of it as **Spotify Wrapped for League Duos** — fun, shareable, and personal.
+**How it works:**
+1. **Enter your summoner name** → We analyze your recent match history via Riot API
+2. **Choose your duo partner** → Pick from your most frequent teammates, or search for any specific player
+3. **Get your duo recap** → AI-powered insights about your synergy, performance, and playstyle together
+
+By highlighting champion/role synergies, performance trends, and group dynamics, we turn raw match data into playful, narrative-driven insights using **AWS Bedrock**. Think of it as **Spotify Wrapped for League Duos** — fun, shareable, and personal.
 
 ---
 
@@ -48,12 +52,13 @@ Instead of only showing raw numbers, **That’s My Duo** creates playful, narrat
 
 ## 🚀 MVP Roadmap
 
-1. **Integrate Riot API** → Fetch match history for two summoner names.  
-2. **Analyze Duo Stats** → Compute champion/role winrates and performance metrics.  
-3. **Generate Recaps** → Use AWS Bedrock to turn stats into fun narratives.  
-4. **Frontend UI** → Build Angular components for synergy stats, recaps, and “Duo Cards.”  
-5. **Group Synergy (optional)** → Expand analysis to 3–5 player groups.  
-6. **Social Features** → Add “Download as Image” for sharing duo recaps.  
+1. **Integrate Riot API** → Fetch match history for a single summoner name.  
+2. **Teammate Discovery** → Identify frequent duo partners from match history and enable manual player search.  
+3. **Analyze Duo Stats** → Compute champion/role winrates and performance metrics for selected duo pairs.  
+4. **Generate Recaps** → Use AWS Bedrock to turn stats into fun narratives.  
+5. **Frontend UI** → Build Angular components for teammate selection, synergy stats, recaps, and "Duo Cards."  
+6. **Group Synergy (optional)** → Expand analysis to 3–5 player groups.  
+7. **Social Features** → Add "Download as Image" for sharing duo recaps.  
 
 ---
 
