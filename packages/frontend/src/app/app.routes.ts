@@ -8,7 +8,7 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
-        path: 'summoner/:region/:name',
+        path: 'summoner/:region/:gameName/:tagLine',
         component: SummonerProfileComponent
     }
 ];

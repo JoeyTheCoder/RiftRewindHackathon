@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { SummonerService } from '../app/services/summoner.service';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +11,16 @@ import { Router } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  summonerName: string = '';
+  gameName: string = '';
+  tagLine: string = '';
   selectedRegion: string = 'na1';
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private summonerService: SummonerService
+  ) {}
 
   regions = [
     { code: 'na1', name: 'North America', flag: '🇺🇸' },
@@ -45,9 +52,27 @@ export class HomeComponent {
   }
 
   onLookupSummoner() {
-    if (this.summonerName.trim()) {
-      // Navigate to summoner profile page with region and name as route parameters
-      this.router.navigate(['/summoner', this.selectedRegion, this.summonerName.trim()]);
+    if (!this.gameName.trim() || !this.tagLine.trim()) {
+      this.errorMessage = 'Both game name and tag are required';
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.summonerService.searchSummoner(this.selectedRegion, this.gameName.trim(), this.tagLine.trim())
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          // Navigate to summoner profile page with the summoner data
+          this.router.navigate(['/summoner', this.selectedRegion, this.gameName.trim(), this.tagLine.trim()], {
+            state: { summonerData: response.data }
+          });
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error;
+        }
+      });
   }
 }
