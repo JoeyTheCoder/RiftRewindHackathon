@@ -76,6 +76,33 @@ export interface ApiError {
   message: string;
 }
 
+export interface DuoPartner {
+  puuid: string;
+  games: number;
+  gameName?: string;
+  tagLine?: string;
+}
+
+export interface DuoPartnersData {
+  partners: DuoPartner[];
+  meta: {
+    filteredQueues: number[];
+    sinceDays: number;
+    scanned: number;
+  };
+}
+
+export interface DuoPartnersResponse {
+  success: boolean;
+  data: DuoPartnersData;
+}
+
+export interface RiotAccount {
+  puuid: string;
+  gameName: string;
+  tagLine: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,6 +115,22 @@ export class SummonerService {
     const url = `${this.baseUrl}/summoner/${region}/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
     
     return this.http.get<SummonerResponse>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getDuoPartners(region: string, gameName: string, tagLine: string): Observable<DuoPartnersResponse> {
+    const url = `${this.baseUrl}/duo/partners/${region}/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
+    
+    return this.http.get<DuoPartnersResponse>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAccountByPuuid(region: string, puuid: string): Observable<{ success: boolean; data: RiotAccount }> {
+    const url = `${this.baseUrl}/account/${region}/${puuid}`;
+    
+    return this.http.get<{ success: boolean; data: RiotAccount }>(url).pipe(
       catchError(this.handleError)
     );
   }
