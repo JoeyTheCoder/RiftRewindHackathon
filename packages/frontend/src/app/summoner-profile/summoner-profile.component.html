@@ -1,0 +1,262 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center mb-4">
+        <img src="/assets/images/that's my duo logo.png" alt="That's My Duo" class="h-16 w-auto" />
+      </div>
+      <h1 class="text-4xl font-bold text-white mb-2">
+        Summoner Profile
+      </h1>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20 text-center">
+      <div class="flex items-center justify-center mb-4">
+        <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-white mb-4">Loading Summoner Data...</h2>
+      <p class="text-gray-300">Fetching your League of Legends profile</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage && !isLoading" class="bg-red-500/20 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-red-500/30 text-center">
+      <div class="text-6xl mb-4">❌</div>
+      <h2 class="text-2xl font-bold text-white mb-4">Error Loading Profile</h2>
+      <p class="text-red-300 mb-6">{{ errorMessage }}</p>
+      <button (click)="goBack()" class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg text-white transition-all duration-200">
+        ← Back to Search
+      </button>
+    </div>
+
+    <!-- Success State - Summoner Data -->
+    <div *ngIf="summonerData && !isLoading" class="space-y-6">
+      <!-- Main Profile Card -->
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+        <div class="flex items-center justify-center mb-6">
+          <div class="relative">
+            <img 
+              [src]="getProfileIconUrl()" 
+              [alt]="summonerData.name + ' profile icon'"
+              class="w-24 h-24 rounded-full border-4 border-gold-400 shadow-lg"
+            />
+            <div class="absolute -bottom-2 -right-2 bg-blue-600 text-white text-sm font-bold px-2 py-1 rounded-full">
+              {{ summonerData.summonerLevel }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white mb-2">{{ summonerData.gameName }}#{{ summonerData.tagLine }}</h2>
+          <div class="text-gray-300 text-lg mb-4">
+            <span class="uppercase font-semibold">{{ summonerData.region }}</span>
+            <span class="text-gray-400 mx-2">•</span>
+            <span>Level {{ summonerData.summonerLevel }}</span>
+          </div>
+          
+          <!-- Ranked Information -->
+          <div *ngIf="summonerData.rankedInfo" class="mb-6">
+            <div class="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-4 py-2 rounded-lg inline-block">
+              <span class="font-bold">{{ summonerData.rankedInfo.tier }} {{ summonerData.rankedInfo.rank }}</span>
+              <span class="mx-2">•</span>
+              <span>{{ summonerData.rankedInfo.leaguePoints }} LP</span>
+              <span class="mx-2">•</span>
+              <span>{{ summonerData.rankedInfo.winRate }}% WR</span>
+            </div>
+            <div class="text-sm text-gray-400 mt-2">
+              {{ summonerData.rankedInfo.wins }}W / {{ summonerData.rankedInfo.losses }}L
+            </div>
+          </div>
+          
+          <!-- Recent Performance -->
+          <div *ngIf="summonerData.recentPerformance" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white/5 rounded-lg p-4">
+              <div class="text-2xl font-bold" [class]="summonerData.recentPerformance.winRate >= 60 ? 'text-green-400' : summonerData.recentPerformance.winRate >= 40 ? 'text-yellow-400' : 'text-red-400'">
+                {{ summonerData.recentPerformance.winRate }}%
+              </div>
+              <div class="text-xs text-gray-400">Win Rate</div>
+              <div class="text-xs text-gray-500">{{ summonerData.recentPerformance.wins }}W {{ summonerData.recentPerformance.losses }}L</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-4">
+              <div class="text-2xl font-bold text-blue-400">{{ summonerData.recentPerformance.averageKDA }}</div>
+              <div class="text-xs text-gray-400">Avg KDA</div>
+              <div class="text-xs text-gray-500">{{ summonerData.recentPerformance.averageKills }}/{{ summonerData.recentPerformance.averageDeaths }}/{{ summonerData.recentPerformance.averageAssists }}</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-4">
+              <div class="text-2xl font-bold text-purple-400">{{ summonerData.recentPerformance.gamesPlayed }}</div>
+              <div class="text-xs text-gray-400">Games</div>
+              <div class="text-xs text-gray-500">Recent</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-4">
+              <div class="text-2xl font-bold text-green-400">{{ summonerData.recentPerformance.averageKills }}</div>
+              <div class="text-xs text-gray-400">Avg Kills</div>
+              <div class="text-xs text-gray-500">Per Game</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Champion Mastery Card -->
+      <div *ngIf="summonerData.championMastery.length > 0" class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+        <h3 class="text-2xl font-bold text-white mb-6 text-center">🏆 Top Champions</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div *ngFor="let mastery of summonerData.championMastery" class="bg-white/5 rounded-lg p-4 text-center">
+            <div class="text-4xl mb-2">🏆</div>
+            <div class="text-white font-bold">Champion {{ mastery.championId }}</div>
+            <div class="text-sm text-gray-400">Level {{ mastery.championLevel }}</div>
+            <div class="text-xs text-gray-500">{{ (mastery.championPoints / 1000).toFixed(0) }}k points</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Matches Card -->
+      <div *ngIf="summonerData.recentMatches.length > 0" class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+        <h3 class="text-2xl font-bold text-white mb-6 text-center">📊 Recent Matches</h3>
+        <div class="space-y-3">
+          <div *ngFor="let match of summonerData.recentMatches" 
+               class="flex items-center justify-between p-4 rounded-lg"
+               [class]="match.win ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'">
+            <div class="flex items-center space-x-4">
+              <div class="text-2xl">🏆</div>
+              <div>
+                <div class="text-white font-bold">{{ match.championName }}</div>
+                <div class="text-sm text-gray-400">{{ match.teamPosition }}</div>
+              </div>
+            </div>
+            
+            <div class="text-center">
+              <div class="text-white font-bold">{{ match.kills }}/{{ match.deaths }}/{{ match.assists }}</div>
+              <div class="text-sm text-gray-400">{{ match.kda }} KDA</div>
+            </div>
+            
+            <div class="text-center">
+              <div class="text-white">{{ match.cs }} CS</div>
+              <div class="text-sm text-gray-400">{{ (match.gold / 1000).toFixed(1) }}k gold</div>
+            </div>
+            
+            <div class="text-center">
+              <div [class]="match.win ? 'text-green-400 font-bold' : 'text-red-400 font-bold'">
+                {{ match.win ? 'Victory' : 'Defeat' }}
+              </div>
+              <div class="text-xs text-gray-500">{{ (match.gameDuration / 60).toFixed(0) }}min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duo Partners Card -->
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+        <div class="flex items-center justify-center mb-6">
+          <img src="/assets/images/that's my duo logo.png" alt="Duo Partners" class="h-8 w-auto mr-3" />
+          <h3 class="text-2xl font-bold text-white">Your Top Duo Partners</h3>
+        </div>
+        
+        <!-- Loading State for Partners -->
+        <div *ngIf="isLoadingPartners" class="text-center py-8">
+          <div class="flex items-center justify-center mb-4">
+            <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <p class="text-gray-300">Analyzing your last 100 matches...</p>
+          <p class="text-sm text-gray-400 mt-2">Finding your most frequent teammates</p>
+        </div>
+
+        <!-- Error State for Partners -->
+        <div *ngIf="partnersErrorMessage && !isLoadingPartners" class="text-center py-8">
+          <div class="text-4xl mb-4">⚠️</div>
+          <p class="text-red-300">{{ partnersErrorMessage }}</p>
+        </div>
+
+        <!-- Partners List -->
+        <div *ngIf="duoPartners && !isLoadingPartners && !partnersErrorMessage">
+          <!-- No Partners Found -->
+          <div *ngIf="duoPartners.partners.length === 0" class="text-center py-8">
+            <div class="text-6xl mb-4">😔</div>
+            <h4 class="text-xl font-bold text-white mb-2">No Duo Partners Found</h4>
+            <p class="text-gray-300 mb-4">No ranked teammates found in the last {{ duoPartners.meta.sinceDays }} days</p>
+            <p class="text-sm text-gray-400">Play some ranked games with friends to see them here!</p>
+          </div>
+
+          <!-- Partners Found -->
+          <div *ngIf="duoPartners.partners.length > 0">
+            <div class="text-center mb-6">
+              <p class="text-gray-300 text-sm">
+                Found {{ duoPartners.partners.length }} frequent teammate(s) from {{ duoPartners.meta.scanned }} ranked matches
+              </p>
+              <p class="text-gray-400 text-xs mt-1">
+                Ranked Solo/Flex only • Last {{ duoPartners.meta.sinceDays }} days
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div *ngFor="let partner of duoPartners.partners; let i = index" 
+                   class="bg-white/5 hover:bg-white/10 rounded-lg p-6 border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer transform hover:scale-105">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-4">
+                    <div class="relative">
+                      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-2xl font-bold">
+                        {{ i + 1 }}
+                      </div>
+                      <div class="absolute -bottom-1 -right-1 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        #{{ i + 1 }}
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-white font-bold text-lg mb-1">
+                        <span *ngIf="partner.gameName">{{ partner.gameName }}#{{ partner.tagLine }}</span>
+                        <span *ngIf="!partner.gameName">Teammate #{{ i + 1 }}</span>
+                      </div>
+                      <div class="text-xs text-gray-400 font-mono break-all" *ngIf="!partner.gameName">
+                        {{ partner.puuid.substring(0, 20) }}...
+                      </div>
+                      <div class="mt-2 flex items-center space-x-2">
+                        <span class="bg-blue-500/30 text-blue-300 text-xs px-2 py-1 rounded-full">
+                          🎮 {{ partner.games }} {{ partner.games === 1 ? 'game' : 'games' }}
+                        </span>
+                        <span *ngIf="duoPartners && duoPartners.meta.scanned > 0" class="text-xs text-gray-400">
+                          ({{ ((partner.games / duoPartners.meta.scanned) * 100).toFixed(0) }}%)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-3xl">
+                    🤝
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="mt-6 text-center">
+              <div class="bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg p-6 border border-purple-500/30">
+                <div class="text-4xl mb-3">✨</div>
+                <h4 class="text-lg font-bold text-white mb-2">Coming Soon: Detailed Duo Analysis!</h4>
+                <p class="text-sm text-gray-300 mb-4">
+                  We'll show win rates, champion synergies, and AI-powered insights for each duo partner.
+                </p>
+                <div class="flex flex-wrap justify-center gap-2">
+                  <span class="bg-white/10 text-gray-300 text-xs px-3 py-1 rounded-full">📊 Win Rates</span>
+                  <span class="bg-white/10 text-gray-300 text-xs px-3 py-1 rounded-full">🏆 Best Champions</span>
+                  <span class="bg-white/10 text-gray-300 text-xs px-3 py-1 rounded-full">🤖 AI Insights</span>
+                  <span class="bg-white/10 text-gray-300 text-xs px-3 py-1 rounded-full">📈 Synergy Score</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-8">
+      <button (click)="goBack()" class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-all duration-200">
+        ← Back to Search
+      </button>
+    </div>
+  </div>
+</div>
