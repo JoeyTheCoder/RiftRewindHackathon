@@ -1,0 +1,408 @@
+{
+  "riotId": {
+    "gameName": "Avrion",
+    "tagLine": "FFG"
+  },
+  "region": "EUW",
+  "puuid": "W5L4GxPpd_9WDEi9k5unRCKOxMMhloFAOTCIdZGaPMVTNXGcixIFr_meEebSDtVkb9xrW1liOSNU1g",
+  "profile": {
+    "profileIconId": 3614,
+    "summonerLevel": 718,
+    "recentWinrate": {
+      "matches": 50,
+      "wins": 32
+    }
+  },
+  "topChampions": [
+    {
+      "champion": "Blitzcrank",
+      "games": 13,
+      "wins": 9
+    },
+    {
+      "champion": "Thresh",
+      "games": 12,
+      "wins": 11
+    },
+    {
+      "champion": "Karma",
+      "games": 5,
+      "wins": 2
+    },
+    {
+      "champion": "Yuumi",
+      "games": 5,
+      "wins": 4
+    },
+    {
+      "champion": "Gnar",
+      "games": 3,
+      "wins": 1
+    },
+    {
+      "champion": "Poppy",
+      "games": 3,
+      "wins": 2
+    },
+    {
+      "champion": "Morgana",
+      "games": 3,
+      "wins": 2
+    },
+    {
+      "champion": "Rell",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Braum",
+      "games": 1,
+      "wins": 0
+    },
+    {
+      "champion": "TahmKench",
+      "games": 1,
+      "wins": 0
+    }
+  ],
+  "roles": [
+    {
+      "teamPosition": "UTILITY",
+      "games": 43
+    },
+    {
+      "teamPosition": "TOP",
+      "games": 7
+    }
+  ],
+  "frequentTeammates": [
+    {
+      "puuid": "jI8JxPCIUNrOGlTlSicwXwZDLGs7h0KyMI1Ue-lZFkjb5pY2c8GGdP_z4aUG1qveB95fNjzw7D6C2Q",
+      "summonerName": "TheRegardedKing",
+      "tagLine": "KRALI",
+      "gamesTogether": 18,
+      "winsTogether": 12,
+      "lastPlayedAt": 1761340326620,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "BOTTOM",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Smolder",
+          "Thresh"
+        ],
+        [
+          "Blitzcrank",
+          "Sivir"
+        ],
+        [
+          "Blitzcrank",
+          "Vayne"
+        ]
+      ]
+    },
+    {
+      "puuid": "KX_6Ys-FjMgCXYzFffA5lI3QYQhrMTr3zVe-GGfuWv3LkS1e0cYhFTQxn2ECOY4jxNrVCYwAoID4dQ",
+      "summonerName": "H03A55N1994",
+      "tagLine": "FFG",
+      "gamesTogether": 14,
+      "winsTogether": 8,
+      "lastPlayedAt": 1761340326620,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "Ekko"
+        ],
+        [
+          "Blitzcrank",
+          "Naafiri"
+        ],
+        [
+          "Ekko",
+          "Karma"
+        ]
+      ]
+    },
+    {
+      "puuid": "8QrQjWfmaFYL_SPi2fx0mumsKm4h51h9AiKLU2JRLFOhjIAAcROUiUKh7C5rxr2ykqNiWl_Uff0EUg",
+      "summonerName": "RivenCarryMe",
+      "tagLine": "EUW",
+      "gamesTogether": 13,
+      "winsTogether": 8,
+      "lastPlayedAt": 1761436017872,
+      "topRolePairs": [
+        [
+          "MIDDLE",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Leblanc",
+          "Thresh"
+        ],
+        [
+          "Blitzcrank",
+          "Leblanc"
+        ],
+        [
+          "Blitzcrank",
+          "Zed"
+        ]
+      ]
+    },
+    {
+      "puuid": "Fi_Qi2V5J7sROlAA5PmA6viJSYKlLOgopL7AsCjhhHTIMPVY5aePwQkeZenUSyd29wkzW7zY2u4kpQ",
+      "summonerName": "FFG Aziz",
+      "tagLine": "FFG",
+      "gamesTogether": 12,
+      "winsTogether": 10,
+      "lastPlayedAt": 1761436017872,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "Irelia"
+        ],
+        [
+          "Jax",
+          "Thresh"
+        ],
+        [
+          "LeeSin",
+          "Thresh"
+        ]
+      ]
+    },
+    {
+      "puuid": "sChcq4R2fcNrb4GdmlX_QTGiTzu2EH6UewXiCoVMagMElmkduSQSK41OFa4mkMzEeYgwkZ8yRWZgsA",
+      "summonerName": "Strainque",
+      "tagLine": "9207",
+      "gamesTogether": 9,
+      "winsTogether": 7,
+      "lastPlayedAt": 1761076277580,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "Draven"
+        ],
+        [
+          "Blitzcrank",
+          "Katarina"
+        ],
+        [
+          "Heimerdinger",
+          "Thresh"
+        ]
+      ]
+    },
+    {
+      "puuid": "QudX3SbO1vnQX8884qQpDFJFqd-DwiucEVL_iPQ9pZVejIvmh6LoYUgioiXtP2yYYMYpYTZrZmjzxA",
+      "summonerName": "xSIDESTEPCITYx",
+      "tagLine": "FFG",
+      "gamesTogether": 8,
+      "winsTogether": 5,
+      "lastPlayedAt": 1760035633110,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "BOTTOM",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "Kaisa"
+        ],
+        [
+          "Thresh",
+          "Xayah"
+        ],
+        [
+          "Samira",
+          "Thresh"
+        ]
+      ]
+    },
+    {
+      "puuid": "fBo38EwUp8ygyf0lGLU0_x0lJFpLuELb1EvZ1iDinY2o630-Lhy3HciDRrGdDRbdwKgw1eNw2yL0RA",
+      "summonerName": "Sapphirix",
+      "tagLine": "FFG",
+      "gamesTogether": 7,
+      "winsTogether": 4,
+      "lastPlayedAt": 1760035633110,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "TahmKench"
+        ],
+        [
+          "Orianna",
+          "Thresh"
+        ],
+        [
+          "Braum",
+          "Ornn"
+        ]
+      ]
+    },
+    {
+      "puuid": "ALh_Gs6NHtMSRzyV0cY-BF-ebs5maBDeTagqWRmo2v3QXi0mRqp4vla25BROk-cdeFa1T-bOClQ52Q",
+      "summonerName": "ADC Main S15 XD",
+      "tagLine": "GGFF",
+      "gamesTogether": 7,
+      "winsTogether": 4,
+      "lastPlayedAt": 1755917586305,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "BOTTOM",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Smolder",
+          "Yuumi"
+        ],
+        [
+          "Jinx",
+          "Poppy"
+        ],
+        [
+          "Jinx",
+          "Thresh"
+        ]
+      ]
+    },
+    {
+      "puuid": "y5yWsKP1610Aw9QzVFPogzfOw3O0aw1ZU6-pCB3yXFORAxEZx6srW70ZprQAkNUgk2fXxtI8ZcugkA",
+      "summonerName": "TheRuinedKing",
+      "tagLine": "FFG",
+      "gamesTogether": 5,
+      "winsTogether": 2,
+      "lastPlayedAt": 1759617572239,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Gnar",
+          "Udyr"
+        ],
+        [
+          "Blitzcrank",
+          "Pantheon"
+        ],
+        [
+          "KSante",
+          "TahmKench"
+        ]
+      ]
+    },
+    {
+      "puuid": "7WtwCl6VMAIroFJqcU3yBt5HkFBrUvlXIUPXXYo4ulm35zH_mx1dIQ1cNXxVStYrySv5t4Uhxi042Q",
+      "summonerName": "slender424",
+      "tagLine": "EUW",
+      "gamesTogether": 3,
+      "winsTogether": 1,
+      "lastPlayedAt": 1761430505973,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "UTILITY"
+        ],
+        [
+          "TOP",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "LeeSin"
+        ],
+        [
+          "Blitzcrank",
+          "Kayle"
+        ],
+        [
+          "Morgana",
+          "Qiyana"
+        ]
+      ]
+    }
+  ],
+  "meta": {
+    "queueFilter": [
+      420,
+      440
+    ],
+    "sampleSize": 50,
+    "generatedAt": 1761438460676
+  }
+}

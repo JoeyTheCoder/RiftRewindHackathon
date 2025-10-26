@@ -1,0 +1,412 @@
+{
+  "riotId": {
+    "gameName": "H03A55N1994",
+    "tagLine": "FFG"
+  },
+  "region": "EUW",
+  "puuid": "KX_6Ys-FjMgCXYzFffA5lI3QYQhrMTr3zVe-GGfuWv3LkS1e0cYhFTQxn2ECOY4jxNrVCYwAoID4dQ",
+  "profile": {
+    "profileIconId": 3184,
+    "summonerLevel": 501,
+    "recentWinrate": {
+      "matches": 50,
+      "wins": 30
+    }
+  },
+  "topChampions": [
+    {
+      "champion": "Ekko",
+      "games": 20,
+      "wins": 15
+    },
+    {
+      "champion": "Karma",
+      "games": 9,
+      "wins": 4
+    },
+    {
+      "champion": "Naafiri",
+      "games": 5,
+      "wins": 3
+    },
+    {
+      "champion": "Volibear",
+      "games": 4,
+      "wins": 2
+    },
+    {
+      "champion": "Lissandra",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Leona",
+      "games": 2,
+      "wins": 2
+    },
+    {
+      "champion": "Diana",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Sejuani",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Kayn",
+      "games": 2,
+      "wins": 0
+    },
+    {
+      "champion": "Nautilus",
+      "games": 1,
+      "wins": 1
+    }
+  ],
+  "roles": [
+    {
+      "teamPosition": "JUNGLE",
+      "games": 35
+    },
+    {
+      "teamPosition": "UTILITY",
+      "games": 12
+    },
+    {
+      "teamPosition": "MIDDLE",
+      "games": 2
+    },
+    {
+      "teamPosition": "TOP",
+      "games": 1
+    }
+  ],
+  "frequentTeammates": [
+    {
+      "puuid": "y5yWsKP1610Aw9QzVFPogzfOw3O0aw1ZU6-pCB3yXFORAxEZx6srW70ZprQAkNUgk2fXxtI8ZcugkA",
+      "summonerName": "TheRuinedKing",
+      "tagLine": "FFG",
+      "gamesTogether": 18,
+      "winsTogether": 11,
+      "lastPlayedAt": 1761425097743,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "TOP"
+        ],
+        [
+          "TOP",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Jax",
+          "Karma"
+        ],
+        [
+          "Ekko",
+          "Jax"
+        ],
+        [
+          "Gwen",
+          "Karma"
+        ]
+      ]
+    },
+    {
+      "puuid": "QudX3SbO1vnQX8884qQpDFJFqd-DwiucEVL_iPQ9pZVejIvmh6LoYUgioiXtP2yYYMYpYTZrZmjzxA",
+      "summonerName": "xSIDESTEPCITYx",
+      "tagLine": "FFG",
+      "gamesTogether": 16,
+      "winsTogether": 11,
+      "lastPlayedAt": 1761425097743,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "JUNGLE"
+        ],
+        [
+          "BOTTOM",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Karma",
+          "Xayah"
+        ],
+        [
+          "Draven",
+          "Karma"
+        ],
+        [
+          "Lissandra",
+          "MissFortune"
+        ]
+      ]
+    },
+    {
+      "puuid": "Fi_Qi2V5J7sROlAA5PmA6viJSYKlLOgopL7AsCjhhHTIMPVY5aePwQkeZenUSyd29wkzW7zY2u4kpQ",
+      "summonerName": "FFG Aziz",
+      "tagLine": "FFG",
+      "gamesTogether": 15,
+      "winsTogether": 7,
+      "lastPlayedAt": 1761250534595,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "TOP"
+        ],
+        [
+          "JUNGLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Ekko",
+          "Irelia"
+        ],
+        [
+          "Karma",
+          "Volibear"
+        ],
+        [
+          "Ekko",
+          "Riven"
+        ]
+      ]
+    },
+    {
+      "puuid": "8QrQjWfmaFYL_SPi2fx0mumsKm4h51h9AiKLU2JRLFOhjIAAcROUiUKh7C5rxr2ykqNiWl_Uff0EUg",
+      "summonerName": "RivenCarryMe",
+      "tagLine": "EUW",
+      "gamesTogether": 14,
+      "winsTogether": 8,
+      "lastPlayedAt": 1761425097743,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "MIDDLE"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Ekko",
+          "Zed"
+        ],
+        [
+          "Leblanc",
+          "Volibear"
+        ],
+        [
+          "Karma",
+          "Zed"
+        ]
+      ]
+    },
+    {
+      "puuid": "jI8JxPCIUNrOGlTlSicwXwZDLGs7h0KyMI1Ue-lZFkjb5pY2c8GGdP_z4aUG1qveB95fNjzw7D6C2Q",
+      "summonerName": "TheRegardedKing",
+      "tagLine": "KRALI",
+      "gamesTogether": 11,
+      "winsTogether": 5,
+      "lastPlayedAt": 1761340326620,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "JUNGLE"
+        ],
+        [
+          "BOTTOM",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Ekko",
+          "Sivir"
+        ],
+        [
+          "Ekko",
+          "Varus"
+        ],
+        [
+          "Ekko",
+          "Vayne"
+        ]
+      ]
+    },
+    {
+      "puuid": "7WtwCl6VMAIroFJqcU3yBt5HkFBrUvlXIUPXXYo4ulm35zH_mx1dIQ1cNXxVStYrySv5t4Uhxi042Q",
+      "summonerName": "slender424",
+      "tagLine": "EUW",
+      "gamesTogether": 10,
+      "winsTogether": 6,
+      "lastPlayedAt": 1761425097743,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "TOP"
+        ],
+        [
+          "TOP",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "AurelionSol",
+          "Karma"
+        ],
+        [
+          "Ekko",
+          "Sion"
+        ],
+        [
+          "Karma",
+          "Volibear"
+        ]
+      ]
+    },
+    {
+      "puuid": "W5L4GxPpd_9WDEi9k5unRCKOxMMhloFAOTCIdZGaPMVTNXGcixIFr_meEebSDtVkb9xrW1liOSNU1g",
+      "summonerName": "Avrion",
+      "tagLine": "FFG",
+      "gamesTogether": 10,
+      "winsTogether": 4,
+      "lastPlayedAt": 1761340326620,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "Ekko"
+        ],
+        [
+          "Blitzcrank",
+          "Naafiri"
+        ],
+        [
+          "Ekko",
+          "Karma"
+        ]
+      ]
+    },
+    {
+      "puuid": "8KtkLA1Jo7I-V_GMR5sWA8Iq5Sy_-ZC5KRr_W1331BbKm8gELVrMPsPPkCsn5ySHSrAP06weXoQqUg",
+      "summonerName": "Sh1n",
+      "tagLine": "1506",
+      "gamesTogether": 9,
+      "winsTogether": 5,
+      "lastPlayedAt": 1761422383030,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "MIDDLE"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Ekko",
+          "Vex"
+        ],
+        [
+          "Lissandra",
+          "Rell"
+        ],
+        [
+          "Nautilus",
+          "Vex"
+        ]
+      ]
+    },
+    {
+      "puuid": "fBo38EwUp8ygyf0lGLU0_x0lJFpLuELb1EvZ1iDinY2o630-Lhy3HciDRrGdDRbdwKgw1eNw2yL0RA",
+      "summonerName": "Sapphirix",
+      "tagLine": "FFG",
+      "gamesTogether": 9,
+      "winsTogether": 3,
+      "lastPlayedAt": 1761413881969,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Karma",
+          "Sion"
+        ],
+        [
+          "Ornn",
+          "Sejuani"
+        ],
+        [
+          "Ekko",
+          "Zyra"
+        ]
+      ]
+    },
+    {
+      "puuid": "UKVa5tD13nobDHYfKjqq5Ee2EAW1eJR2-7h3h_IuHh2U7hrT-5rnmbc-9no2vWxQ7prL4VbS-juF5A",
+      "summonerName": "DlDDYsDisciple",
+      "tagLine": "000",
+      "gamesTogether": 4,
+      "winsTogether": 3,
+      "lastPlayedAt": 1761309425530,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "MIDDLE"
+        ],
+        [
+          "BOTTOM",
+          "JUNGLE"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Ekko",
+          "Mel"
+        ],
+        [
+          "Ashe",
+          "Ekko"
+        ],
+        [
+          "Mel",
+          "Naafiri"
+        ]
+      ]
+    }
+  ],
+  "meta": {
+    "queueFilter": [
+      420,
+      440
+    ],
+    "sampleSize": 50,
+    "generatedAt": 1761438872935
+  }
+}

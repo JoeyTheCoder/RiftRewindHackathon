@@ -2,15 +2,24 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo and Title -->
-      <div class="flex items-center space-x-3">
+      <a routerLink="/" class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
         <img src="assets/images/that's my duo logo.png" alt="Logo" class="h-10 w-10">
         <span class="text-xl font-bold text-white">That's my Duo</span>
-      </div>
+      </a>
       
       <!-- Nav Items -->
       <div class="flex space-x-8">
-        <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">Home</a>
-        <a href="/about" class="text-slate-300 hover:text-white font-medium transition-colors">About</a>
+        <a routerLink="/" 
+           routerLinkActive="text-cyan-400" 
+           [routerLinkActiveOptions]="{exact: true}"
+           class="text-slate-300 hover:text-white font-medium transition-colors">
+          Home
+        </a>
+        <a routerLink="/about" 
+           routerLinkActive="text-cyan-400"
+           class="text-slate-300 hover:text-white font-medium transition-colors">
+          About
+        </a>
       </div>
     </div>
   </div>

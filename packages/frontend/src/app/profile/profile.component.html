@@ -1,0 +1,370 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+  <!-- Navbar -->
+  <app-navbar></app-navbar>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" *ngIf="summary">
+    <!-- Player Header -->
+    <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-8 mb-6 shadow-2xl">
+      <div class="flex items-center space-x-6">
+        <!-- Profile Icon -->
+        <div class="flex-shrink-0">
+          <img 
+            [src]="getProfileIconUrl(summary.profile.profileIconId)" 
+            alt="Profile Icon"
+            class="w-24 h-24 rounded-full border-4 border-cyan-500/50 shadow-lg"
+            onerror="this.src='https://ddragon.leagueoflegends.com/cdn/14.23.1/img/profileicon/29.png'"
+          >
+        </div>
+
+        <!-- Player Info -->
+        <div class="flex-1">
+          <h1 class="text-4xl font-bold text-white mb-2">
+            {{ summary.riotId.gameName }}<span class="text-slate-400">#{{ summary.riotId.tagLine }}</span>
+          </h1>
+          <div class="flex items-center space-x-4 text-slate-300">
+            <span class="flex items-center space-x-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a8 8 0 100 16 8 8 0 000-16z"/>
+              </svg>
+              <span>Level {{ summary.profile.summonerLevel }}</span>
+            </span>
+            <span class="text-slate-500">•</span>
+            <span>{{ summary.region }}</span>
+            <span class="text-slate-500">•</span>
+            <span>{{ summary.meta.sampleSize }} ranked matches analyzed</span>
+          </div>
+        </div>
+
+        <!-- Win Rate Badge -->
+        <div class="text-center">
+          <div class="text-4xl font-bold" [ngClass]="{
+            'text-green-400': getWinRate() >= 55,
+            'text-cyan-400': getWinRate() >= 45 && getWinRate() < 55,
+            'text-red-400': getWinRate() < 45
+          }">
+            {{ getWinRate() }}%
+          </div>
+          <div class="text-sm text-slate-400">Win Rate</div>
+          <div class="text-xs text-slate-500 mt-1">
+            {{ summary.profile.recentWinrate.wins }}W {{ summary.profile.recentWinrate.matches - summary.profile.recentWinrate.wins }}L
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Top Champions -->
+      <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6 shadow-2xl">
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+          <span>🏆</span>
+          <span>Top Champions</span>
+        </h2>
+        <div class="space-y-3">
+          <div *ngFor="let champ of summary.topChampions.slice(0, 5)" 
+               class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-all">
+            <div class="flex items-center space-x-3 flex-1">
+              <img 
+                [src]="getChampionIconUrl(champ.champion)" 
+                [alt]="champ.champion"
+                class="w-10 h-10 rounded-lg border-2 border-slate-600"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+              >
+              <span class="text-2xl hidden">⚔️</span>
+              <div>
+                <div class="font-semibold text-white">{{ champ.champion }}</div>
+                <div class="text-sm text-slate-400">{{ champ.games }} games</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-semibold" [ngClass]="{
+                'text-green-400': getChampionWinRate(champ) >= 55,
+                'text-cyan-400': getChampionWinRate(champ) >= 45 && getChampionWinRate(champ) < 55,
+                'text-red-400': getChampionWinRate(champ) < 45
+              }">
+                {{ getChampionWinRate(champ) }}%
+              </div>
+              <div class="text-xs text-slate-500">{{ champ.wins }}W {{ champ.games - champ.wins }}L</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Distribution -->
+      <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6 shadow-2xl">
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+          <span>🎯</span>
+          <span>Role Distribution</span>
+        </h2>
+        <div class="space-y-3">
+          <div *ngFor="let role of summary.roles" 
+               class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+            <div class="flex items-center space-x-3">
+              <img 
+                [src]="getRoleIconUrl(role.teamPosition)" 
+                [alt]="role.teamPosition"
+                class="w-8 h-8"
+              >
+              <span class="font-semibold text-white">{{ getRoleName(role.teamPosition) }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-slate-400">{{ role.games }} games</span>
+              <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-600" 
+                     [style.width.%]="(role.games / summary.meta.sampleSize) * 100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frequent Teammates -->
+    <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6 shadow-2xl">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+        <span>👥</span>
+        <span>Top 10 Frequent Teammates</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div *ngFor="let teammate of summary.frequentTeammates" 
+             class="p-4 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-all border border-slate-600/50">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex-1">
+              <div class="font-semibold text-white">
+                {{ teammate.summonerName }}<span *ngIf="teammate.tagLine" class="text-slate-400">#{{ teammate.tagLine }}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-semibold" [ngClass]="{
+                'text-green-400': getTeammateWinRate(teammate) >= 55,
+                'text-cyan-400': getTeammateWinRate(teammate) >= 45 && getTeammateWinRate(teammate) < 55,
+                'text-red-400': getTeammateWinRate(teammate) < 45
+              }">
+                {{ getTeammateWinRate(teammate) }}%
+              </div>
+              <div class="text-xs text-slate-500">
+                {{ teammate.winsTogether }}W {{ teammate.gamesTogether - teammate.winsTogether }}L
+              </div>
+            </div>
+          </div>
+
+          <div class="text-sm mb-2">
+            <span class="text-slate-400">{{ teammate.gamesTogether }} games together</span>
+          </div>
+
+          <!-- Role Pairs -->
+          <div class="mb-2" *ngIf="teammate.topRolePairs.length > 0">
+            <div class="text-xs text-slate-500 mb-1">Top Role Pairs:</div>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let pair of teammate.topRolePairs.slice(0, 2)" 
+                    class="px-2 py-1 bg-slate-600/50 rounded text-xs text-slate-300 flex items-center space-x-1">
+                <img [src]="getRoleIconUrl(pair[0])" class="w-4 h-4 inline">
+                <span>+</span>
+                <img [src]="getRoleIconUrl(pair[1])" class="w-4 h-4 inline">
+              </span>
+            </div>
+          </div>
+
+          <!-- Champion Pairs -->
+          <div *ngIf="teammate.topChampionPairs.length > 0">
+            <div class="text-xs text-slate-500 mb-1">Top Champion Combos:</div>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let pair of teammate.topChampionPairs.slice(0, 3)" 
+                    class="px-2 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded text-xs text-cyan-300">
+                {{ pair[0] }} + {{ pair[1] }}
+              </span>
+            </div>
+          </div>
+
+          <!-- View Duo Stats Button -->
+          <button 
+            (click)="selectTeammate(teammate)"
+            class="mt-3 w-full py-2 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl">
+            View Duo Stats
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duo Summary Display -->
+    <div *ngIf="selectedTeammate" 
+         class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6 shadow-2xl mt-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-white flex items-center space-x-2">
+          <span>🤝</span>
+          <span>Duo Stats: You + {{ selectedTeammate.summonerName }}</span>
+        </h2>
+        <button 
+          (click)="clearTeammate()"
+          class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all">
+          Close
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loadingDuo" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
+        <p class="mt-4 text-slate-400">Loading duo stats...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="duoError && !loadingDuo" class="text-center py-8 text-red-400">
+        {{ duoError }}
+      </div>
+
+      <!-- Duo Summary -->
+      <div *ngIf="duoSummary && !loadingDuo" class="space-y-6">
+        <!-- Overview Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-slate-700/30 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-cyan-400">{{ duoSummary.sampleSize }}</div>
+            <div class="text-sm text-slate-400">Games Together</div>
+          </div>
+          <div class="bg-slate-700/30 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold" [ngClass]="{
+              'text-green-400': getDuoWinRate() >= '55%',
+              'text-cyan-400': getDuoWinRate() >= '45%' && getDuoWinRate() < '55%',
+              'text-red-400': getDuoWinRate() < '45%'
+            }">
+              {{ getDuoWinRate() }}
+            </div>
+            <div class="text-sm text-slate-400">Win Rate</div>
+            <div class="text-xs text-slate-500">{{ duoSummary.wins }}W {{ duoSummary.sampleSize - duoSummary.wins }}L</div>
+          </div>
+          <div class="bg-slate-700/30 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-cyan-400">{{ duoSummary.synergy.avgCombinedKA }}</div>
+            <div class="text-sm text-slate-400">Avg Combined K+A</div>
+          </div>
+          <div class="bg-slate-700/30 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-cyan-400">{{ duoSummary.gameTexture.avgGameDurationMin }}</div>
+            <div class="text-sm text-slate-400">Avg Game Time (min)</div>
+          </div>
+        </div>
+
+        <!-- Low Sample Warning -->
+        <div *ngIf="duoSummary.lowSample" 
+             class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-yellow-300">
+          ⚠️ Small sample size - stats may not be representative
+        </div>
+
+        <!-- Queue Breakdown -->
+        <div *ngIf="duoSummary.queueBreakdown && Object.keys(duoSummary.queueBreakdown).length > 0">
+          <h3 class="text-xl font-bold text-white mb-3">Queue Breakdown</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngFor="let queue of Object.keys(duoSummary.queueBreakdown)" 
+                 class="bg-slate-700/30 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">{{ getQueueName(+queue) }}</div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">{{ duoSummary.queueBreakdown[queue].games }} games</span>
+                <span class="font-bold" [ngClass]="{
+                  'text-green-400': (duoSummary.queueBreakdown[queue].wins / duoSummary.queueBreakdown[queue].games * 100) >= 55,
+                  'text-cyan-400': (duoSummary.queueBreakdown[queue].wins / duoSummary.queueBreakdown[queue].games * 100) >= 45 && (duoSummary.queueBreakdown[queue].wins / duoSummary.queueBreakdown[queue].games * 100) < 55,
+                  'text-red-400': (duoSummary.queueBreakdown[queue].wins / duoSummary.queueBreakdown[queue].games * 100) < 45
+                }">
+                  {{ Math.round(duoSummary.queueBreakdown[queue].wins / duoSummary.queueBreakdown[queue].games * 100) }}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Pairs -->
+        <div *ngIf="duoSummary.rolePairs && duoSummary.rolePairs.length > 0">
+          <h3 class="text-xl font-bold text-white mb-3">Role Combinations</h3>
+          <div class="space-y-2">
+            <div *ngFor="let rolePair of duoSummary.rolePairs.slice(0, 5)" 
+                 class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div class="flex items-center space-x-2">
+                <img [src]="getRoleIconUrl(rolePair.pair[0])" class="w-6 h-6">
+                <span class="text-white">+</span>
+                <img [src]="getRoleIconUrl(rolePair.pair[1])" class="w-6 h-6">
+                <span class="text-slate-300">{{ getRoleName(rolePair.pair[0]) }} + {{ getRoleName(rolePair.pair[1]) }}</span>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="text-slate-400">{{ rolePair.games }} games</span>
+                <span class="font-semibold" [ngClass]="{
+                  'text-green-400': (rolePair.wins / rolePair.games * 100) >= 55,
+                  'text-cyan-400': (rolePair.wins / rolePair.games * 100) >= 45 && (rolePair.wins / rolePair.games * 100) < 55,
+                  'text-red-400': (rolePair.wins / rolePair.games * 100) < 45
+                }">
+                  {{ Math.round(rolePair.wins / rolePair.games * 100) }}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Champion Pairs -->
+        <div *ngIf="duoSummary.championPairsTop && duoSummary.championPairsTop.length > 0">
+          <h3 class="text-xl font-bold text-white mb-3">Best Champion Combinations</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngFor="let champPair of duoSummary.championPairsTop.slice(0, 6)" 
+                 class="p-4 bg-slate-700/30 rounded-lg">
+              <div class="flex items-center space-x-3 mb-2">
+                <img [src]="getChampionIconUrl(champPair.pair[0])" class="w-10 h-10 rounded-full">
+                <span class="text-white font-semibold">+</span>
+                <img [src]="getChampionIconUrl(champPair.pair[1])" class="w-10 h-10 rounded-full">
+              </div>
+              <div class="text-sm text-slate-300 mb-1">{{ champPair.pair[0] }} + {{ champPair.pair[1] }}</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400">{{ champPair.games }} games</span>
+                <span class="text-sm font-semibold" [ngClass]="{
+                  'text-green-400': (champPair.wins / champPair.games * 100) >= 55,
+                  'text-cyan-400': (champPair.wins / champPair.games * 100) >= 45 && (champPair.wins / champPair.games * 100) < 55,
+                  'text-red-400': (champPair.wins / champPair.games * 100) < 45
+                }">
+                  {{ Math.round(champPair.wins / champPair.games * 100) }}% WR
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Synergy Stats -->
+        <div *ngIf="duoSummary.synergy">
+          <h3 class="text-xl font-bold text-white mb-3">Synergy Analysis</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Your Kill Participation</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ (duoSummary.synergy.avgKillParticipationA * 100).toFixed(1) }}%
+              </div>
+            </div>
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Their Kill Participation</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ (duoSummary.synergy.avgKillParticipationB * 100).toFixed(1) }}%
+              </div>
+            </div>
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Your Avg Vision</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ duoSummary.synergy.avgVisionScoreA.toFixed(1) }}
+              </div>
+            </div>
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Their Avg Vision</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ duoSummary.synergy.avgVisionScoreB.toFixed(1) }}
+              </div>
+            </div>
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Your Damage Share</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ (duoSummary.synergy.avgTeamDamagePctA * 100).toFixed(1) }}%
+              </div>
+            </div>
+            <div class="bg-slate-700/30 rounded-lg p-3">
+              <div class="text-sm text-slate-400">Their Damage Share</div>
+              <div class="text-2xl font-bold text-cyan-400">
+                {{ (duoSummary.synergy.avgTeamDamagePctB * 100).toFixed(1) }}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+

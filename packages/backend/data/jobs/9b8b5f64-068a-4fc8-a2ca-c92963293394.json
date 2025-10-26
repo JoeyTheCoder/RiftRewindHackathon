@@ -1,0 +1,13 @@
+{
+  "id": "9b8b5f64-068a-4fc8-a2ca-c92963293394",
+  "status": "error",
+  "gameName": "Sapphirix",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 20,
+  "createdAt": 1761429142056,
+  "updatedAt": 1761429153965,
+  "startedAt": 1761429142070,
+  "completedAt": 1761429153964,
+  "error": "Missing required data files. Found: account=false, matches=false"
+}
