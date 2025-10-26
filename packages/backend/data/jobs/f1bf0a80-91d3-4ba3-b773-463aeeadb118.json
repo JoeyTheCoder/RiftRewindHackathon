@@ -1,0 +1,13 @@
+{
+  "id": "f1bf0a80-91d3-4ba3-b773-463aeeadb118",
+  "status": "error",
+  "gameName": "Sapphirix",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 20,
+  "createdAt": 1761428033149,
+  "updatedAt": 1761428033739,
+  "startedAt": 1761428033160,
+  "completedAt": 1761428033738,
+  "error": "Script execution failed with code 127\nw\u0000s\u0000l\u0000:\u0000 \u0000U\u0000n\u0000k\u0000n\u0000o\u0000w\u0000n\u0000 \u0000k\u0000e\u0000y\u0000 \u0000'\u0000a\u0000u\u0000t\u0000o\u0000m\u0000o\u0000u\u0000n\u0000t\u0000.\u0000c\u0000r\u0000o\u0000s\u0000s\u0000D\u0000i\u0000s\u0000t\u0000r\u0000o\u0000'\u0000 \u0000i\u0000n\u0000 \u0000/\u0000e\u0000t\u0000c\u0000/\u0000w\u0000s\u0000l\u0000.\u0000c\u0000o\u0000n\u0000f\u0000:\u00003\u0000\r\u0000\n\u0000/bin/sh: bash: Permission denied\n"
+}

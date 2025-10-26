@@ -1,0 +1,416 @@
+{
+  "riotId": {
+    "gameName": "Sapphirix",
+    "tagLine": "FFG"
+  },
+  "region": "EUW",
+  "puuid": "fBo38EwUp8ygyf0lGLU0_x0lJFpLuELb1EvZ1iDinY2o630-Lhy3HciDRrGdDRbdwKgw1eNw2yL0RA",
+  "profile": {
+    "profileIconId": 6525,
+    "summonerLevel": 378,
+    "recentWinrate": {
+      "matches": 50,
+      "wins": 21
+    }
+  },
+  "topChampions": [
+    {
+      "champion": "Neeko",
+      "games": 8,
+      "wins": 2
+    },
+    {
+      "champion": "Thresh",
+      "games": 6,
+      "wins": 2
+    },
+    {
+      "champion": "Yuumi",
+      "games": 5,
+      "wins": 4
+    },
+    {
+      "champion": "Orianna",
+      "games": 3,
+      "wins": 1
+    },
+    {
+      "champion": "Morgana",
+      "games": 3,
+      "wins": 2
+    },
+    {
+      "champion": "Braum",
+      "games": 3,
+      "wins": 1
+    },
+    {
+      "champion": "Blitzcrank",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Taliyah",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "TahmKench",
+      "games": 2,
+      "wins": 1
+    },
+    {
+      "champion": "Ornn",
+      "games": 2,
+      "wins": 0
+    }
+  ],
+  "roles": [
+    {
+      "teamPosition": "UTILITY",
+      "games": 33
+    },
+    {
+      "teamPosition": "TOP",
+      "games": 7
+    },
+    {
+      "teamPosition": "MIDDLE",
+      "games": 7
+    },
+    {
+      "teamPosition": "JUNGLE",
+      "games": 3
+    }
+  ],
+  "frequentTeammates": [
+    {
+      "puuid": "QudX3SbO1vnQX8884qQpDFJFqd-DwiucEVL_iPQ9pZVejIvmh6LoYUgioiXtP2yYYMYpYTZrZmjzxA",
+      "summonerName": "xSIDESTEPCITYx",
+      "tagLine": "FFG",
+      "gamesTogether": 22,
+      "winsTogether": 10,
+      "lastPlayedAt": 1760035633110,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "BOTTOM",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Kaisa",
+          "Neeko"
+        ],
+        [
+          "Kaisa",
+          "Thresh"
+        ],
+        [
+          "Kaisa",
+          "TahmKench"
+        ]
+      ]
+    },
+    {
+      "puuid": "y5yWsKP1610Aw9QzVFPogzfOw3O0aw1ZU6-pCB3yXFORAxEZx6srW70ZprQAkNUgk2fXxtI8ZcugkA",
+      "summonerName": "TheRuinedKing",
+      "tagLine": "FFG",
+      "gamesTogether": 18,
+      "winsTogether": 7,
+      "lastPlayedAt": 1761413881969,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Jax",
+          "Sion"
+        ],
+        [
+          "Jax",
+          "Zyra"
+        ],
+        [
+          "DrMundo",
+          "Neeko"
+        ]
+      ]
+    },
+    {
+      "puuid": "FKgxy2JanN3j2pOmOzs6e4KMwLXu7aIeih1WJnTf-LRav0ybqsiBuBOnriHEHMTGckg-wFlgc9xu-Q",
+      "summonerName": "Vildkaarl",
+      "tagLine": "EUW",
+      "gamesTogether": 17,
+      "winsTogether": 9,
+      "lastPlayedAt": 1754164110900,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "TOP",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Twitch",
+          "Yuumi"
+        ],
+        [
+          "Nilah",
+          "Taric"
+        ],
+        [
+          "Jhin",
+          "Neeko"
+        ]
+      ]
+    },
+    {
+      "puuid": "KX_6Ys-FjMgCXYzFffA5lI3QYQhrMTr3zVe-GGfuWv3LkS1e0cYhFTQxn2ECOY4jxNrVCYwAoID4dQ",
+      "summonerName": "H03A55N1994",
+      "tagLine": "FFG",
+      "gamesTogether": 13,
+      "winsTogether": 5,
+      "lastPlayedAt": 1761413881969,
+      "topRolePairs": [
+        [
+          "JUNGLE",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Karma",
+          "Sion"
+        ],
+        [
+          "Ornn",
+          "Sejuani"
+        ],
+        [
+          "Ekko",
+          "Zyra"
+        ]
+      ]
+    },
+    {
+      "puuid": "fd5tlOAP9o9WcyCDpQGDnxuF5UfFZNbObxQHgUk86H3k928ANp45PDnLC1Y-ZCL2oxRm1Q9XVUUKsQ",
+      "summonerName": "Füzzerich",
+      "tagLine": "FFG",
+      "gamesTogether": 13,
+      "winsTogether": 5,
+      "lastPlayedAt": 1760657749713,
+      "topRolePairs": [
+        [
+          "MIDDLE",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Akali",
+          "Neeko"
+        ],
+        [
+          "Blitzcrank",
+          "Leblanc"
+        ],
+        [
+          "Taliyah",
+          "Vayne"
+        ]
+      ]
+    },
+    {
+      "puuid": "W5L4GxPpd_9WDEi9k5unRCKOxMMhloFAOTCIdZGaPMVTNXGcixIFr_meEebSDtVkb9xrW1liOSNU1g",
+      "summonerName": "Avrion",
+      "tagLine": "FFG",
+      "gamesTogether": 13,
+      "winsTogether": 6,
+      "lastPlayedAt": 1760035633110,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Blitzcrank",
+          "TahmKench"
+        ],
+        [
+          "Orianna",
+          "Thresh"
+        ],
+        [
+          "Braum",
+          "Ornn"
+        ]
+      ]
+    },
+    {
+      "puuid": "sChcq4R2fcNrb4GdmlX_QTGiTzu2EH6UewXiCoVMagMElmkduSQSK41OFa4mkMzEeYgwkZ8yRWZgsA",
+      "summonerName": "Strainque",
+      "tagLine": "9207",
+      "gamesTogether": 12,
+      "winsTogether": 7,
+      "lastPlayedAt": 1760650834580,
+      "topRolePairs": [
+        [
+          "MIDDLE",
+          "TOP"
+        ],
+        [
+          "BOTTOM",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Taliyah",
+          "Yunara"
+        ],
+        [
+          "Katarina",
+          "TahmKench"
+        ],
+        [
+          "Heimerdinger",
+          "Orianna"
+        ]
+      ]
+    },
+    {
+      "puuid": "8QrQjWfmaFYL_SPi2fx0mumsKm4h51h9AiKLU2JRLFOhjIAAcROUiUKh7C5rxr2ykqNiWl_Uff0EUg",
+      "summonerName": "RivenCarryMe",
+      "tagLine": "EUW",
+      "gamesTogether": 10,
+      "winsTogether": 2,
+      "lastPlayedAt": 1761413881969,
+      "topRolePairs": [
+        [
+          "MIDDLE",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Leblanc",
+          "Neeko"
+        ],
+        [
+          "Sion",
+          "Syndra"
+        ],
+        [
+          "Leblanc",
+          "Thresh"
+        ]
+      ]
+    },
+    {
+      "puuid": "Fi_Qi2V5J7sROlAA5PmA6viJSYKlLOgopL7AsCjhhHTIMPVY5aePwQkeZenUSyd29wkzW7zY2u4kpQ",
+      "summonerName": "FFG Aziz",
+      "tagLine": "FFG",
+      "gamesTogether": 8,
+      "winsTogether": 2,
+      "lastPlayedAt": 1760035633110,
+      "topRolePairs": [
+        [
+          "TOP",
+          "UTILITY"
+        ],
+        [
+          "JUNGLE",
+          "TOP"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Jax",
+          "Neeko"
+        ],
+        [
+          "Jax",
+          "TahmKench"
+        ],
+        [
+          "Orianna",
+          "Volibear"
+        ]
+      ]
+    },
+    {
+      "puuid": "jI8JxPCIUNrOGlTlSicwXwZDLGs7h0KyMI1Ue-lZFkjb5pY2c8GGdP_z4aUG1qveB95fNjzw7D6C2Q",
+      "summonerName": "TheRegardedKing",
+      "tagLine": "KRALI",
+      "gamesTogether": 6,
+      "winsTogether": 0,
+      "lastPlayedAt": 1759617572239,
+      "topRolePairs": [
+        [
+          "BOTTOM",
+          "UTILITY"
+        ],
+        [
+          "MIDDLE",
+          "UTILITY"
+        ]
+      ],
+      "topChampionPairs": [
+        [
+          "Senna",
+          "Thresh"
+        ],
+        [
+          "Diana",
+          "Thresh"
+        ],
+        [
+          "Lissandra",
+          "Morgana"
+        ]
+      ]
+    }
+  ],
+  "meta": {
+    "queueFilter": [
+      420,
+      440
+    ],
+    "sampleSize": 50,
+    "generatedAt": 1761437981922
+  }
+}

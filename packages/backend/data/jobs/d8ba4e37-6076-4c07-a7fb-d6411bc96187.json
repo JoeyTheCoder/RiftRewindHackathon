@@ -1,0 +1,21 @@
+{
+  "id": "d8ba4e37-6076-4c07-a7fb-d6411bc96187",
+  "status": "complete",
+  "gameName": "Sapphirix",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 20,
+  "createdAt": 1761428550656,
+  "updatedAt": 1761428558267,
+  "startedAt": 1761428550669,
+  "completedAt": 1761428558266,
+  "result": {
+    "success": true,
+    "stdout": "=> Resolving account (PUUID) for Sapphirix#FFG via europe ...\n=> Fetching Summoner-V4 (platform euw1) ...\n=> Fetching match IDs (start=0, count=20, queue=none, type=ranked) ...\n=> Fetching match details ...\n   - EUW1_7580906440\n   - EUW1_7570703849\n   - EUW1_7570664042\n   - EUW1_7570603510\n   - EUW1_7562187719\n   - EUW1_7562139766\n   - EUW1_7556371772\n   - EUW1_7556316112\n   - EUW1_7556303770\n   - EUW1_7556215900\n   - EUW1_7556157349\n   - EUW1_7554318709\n   - EUW1_7553706180\n   - EUW1_7553587744\n   - EUW1_7553338359\n   - EUW1_7552811089\n   - EUW1_7542865788\n   - EUW1_7540965667\n   - EUW1_7516736146\n   - EUW1_7516685637\n=> Wrote compact summary: /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/matches_summary_Sapphirix_FFG_20251025T214231Z.json\n\nDone. Files:\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/account_Sapphirix_FFG_20251025T214231Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/summoner_Sapphirix_FFG_20251025T214231Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/match_ids_Sapphirix_FFG_20251025T214231Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/matches_Sapphirix_FFG_20251025T214231Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/matches_summary_Sapphirix_FFG_20251025T214231Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/d8ba4e37-6076-4c07-a7fb-d6411bc96187/run_index_Sapphirix_FFG_20251025T214231Z.json\n",
+    "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000U\u0000n\u0000k\u0000n\u0000o\u0000w\u0000n\u0000 \u0000k\u0000e\u0000y\u0000 \u0000'\u0000a\u0000u\u0000t\u0000o\u0000m\u0000o\u0000u\u0000n\u0000t\u0000.\u0000c\u0000r\u0000o\u0000s\u0000s\u0000D\u0000i\u0000s\u0000t\u0000r\u0000o\u0000'\u0000 \u0000i\u0000n\u0000 \u0000/\u0000e\u0000t\u0000c\u0000/\u0000w\u0000s\u0000l\u0000.\u0000c\u0000o\u0000n\u0000f\u0000:\u00003\u0000\r\u0000\n\u0000",
+    "files": {
+      "outdir": "C:\\Projekte\\RiftRewindHackathon\\packages\\backend\\data\\temp\\d8ba4e37-6076-4c07-a7fb-d6411bc96187"
+    },
+    "outputDir": "C:\\Projekte\\RiftRewindHackathon\\packages\\backend\\data\\temp\\d8ba4e37-6076-4c07-a7fb-d6411bc96187"
+  }
+}

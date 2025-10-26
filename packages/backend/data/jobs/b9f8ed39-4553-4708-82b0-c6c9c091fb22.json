@@ -1,0 +1,13 @@
+{
+  "id": "b9f8ed39-4553-4708-82b0-c6c9c091fb22",
+  "status": "error",
+  "gameName": "Sapphirix",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 20,
+  "createdAt": 1761436216348,
+  "updatedAt": 1761436224269,
+  "startedAt": 1761436216359,
+  "completedAt": 1761436224267,
+  "error": "Command failed: wsl bash -c 'cat > \"/mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/b9f8ed39-4553-4708-82b0-c6c9c091fb22/summary.player.json\"'\nThe system cannot find the path specified.\r\n"
+}

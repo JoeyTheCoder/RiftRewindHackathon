@@ -1,0 +1,434 @@
+{
+  "id": "626e5306-e678-4d8a-b39b-5767a6c98f4e",
+  "status": "complete",
+  "gameName": "xSidestepcityx",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 50,
+  "createdAt": 1761438745216,
+  "updatedAt": 1761438769270,
+  "startedAt": 1761438745220,
+  "completedAt": 1761438769269,
+  "result": {
+    "success": true,
+    "stdout": "=> Resolving account (PUUID) for xSidestepcityx#FFG via europe ...\n=> Fetching Summoner-V4 (platform euw1) ...\n=> Fetching match IDs (start=0, count=50, queue=none, type=ranked) ...\n=> Fetching match details ...\n   - EUW1_7581190802\n   - EUW1_7581116985\n   - EUW1_7581014628\n   - EUW1_7580956790\n   - EUW1_7566140012\n   - EUW1_7566049136\n   - EUW1_7564972544\n   - EUW1_7564912784\n   - EUW1_7564866650\n   - EUW1_7564803331\n   - EUW1_7564675986\n   - EUW1_7564613523\n   - EUW1_7563701243\n   - EUW1_7563661641\n   - EUW1_7562187719\n   - EUW1_7562139766\n   - EUW1_7560056987\n   - EUW1_7559998053\n   - EUW1_7558373994\n   - EUW1_7558070464\n   - EUW1_7558005481\n   - EUW1_7556607890\n   - EUW1_7556316112\n   - EUW1_7556303770\n   - EUW1_7556154488\n   - EUW1_7555936420\n   - EUW1_7555851514\n   - EUW1_7555085512\n   - EUW1_7554318709\n   - EUW1_7553706180\n   - EUW1_7553587744\n   - EUW1_7553338359\n   - EUW1_7553310560\n   - EUW1_7553209110\n   - EUW1_7552700691\n   - EUW1_7547853244\n   - EUW1_7547816946\n   - EUW1_7542865788\n   - EUW1_7541628381\n   - EUW1_7540965667\n   - EUW1_7540804704\n   - EUW1_7540679662\n   - EUW1_7528346558\n   - EUW1_7527110746\n   - EUW1_7526630890\n   - EUW1_7524478180\n   - EUW1_7522751057\n   - EUW1_7519284915\n   - EUW1_7517157281\n   - EUW1_7516736146\n=> Wrote compact summary: /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/matches_summary_xSidestepcityx_FFG_20251026T003225Z.json\n\nDone. Files:\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/account_xSidestepcityx_FFG_20251026T003225Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/summoner_xSidestepcityx_FFG_20251026T003225Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/match_ids_xSidestepcityx_FFG_20251026T003225Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/matches_xSidestepcityx_FFG_20251026T003225Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/matches_summary_xSidestepcityx_FFG_20251026T003225Z.json\n  - /mnt/c/Projekte/RiftRewindHackathon/packages/backend/data/temp/626e5306-e678-4d8a-b39b-5767a6c98f4e/run_index_xSidestepcityx_FFG_20251026T003225Z.json\n",
+    "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000U\u0000n\u0000k\u0000n\u0000o\u0000w\u0000n\u0000 \u0000k\u0000e\u0000y\u0000 \u0000'\u0000a\u0000u\u0000t\u0000o\u0000m\u0000o\u0000u\u0000n\u0000t\u0000.\u0000c\u0000r\u0000o\u0000s\u0000s\u0000D\u0000i\u0000s\u0000t\u0000r\u0000o\u0000'\u0000 \u0000i\u0000n\u0000 \u0000/\u0000e\u0000t\u0000c\u0000/\u0000w\u0000s\u0000l\u0000.\u0000c\u0000o\u0000n\u0000f\u0000:\u00003\u0000\r\u0000\n\u0000",
+    "files": {
+      "outdir": "C:\\Projekte\\RiftRewindHackathon\\packages\\backend\\data\\temp\\626e5306-e678-4d8a-b39b-5767a6c98f4e"
+    },
+    "outputDir": "C:\\Projekte\\RiftRewindHackathon\\packages\\backend\\data\\temp\\626e5306-e678-4d8a-b39b-5767a6c98f4e",
+    "summary": {
+      "riotId": {
+        "gameName": "xSidestepcityx",
+        "tagLine": "FFG"
+      },
+      "region": "EUW",
+      "puuid": "QudX3SbO1vnQX8884qQpDFJFqd-DwiucEVL_iPQ9pZVejIvmh6LoYUgioiXtP2yYYMYpYTZrZmjzxA",
+      "profile": {
+        "profileIconId": 6745,
+        "summonerLevel": 564,
+        "recentWinrate": {
+          "matches": 50,
+          "wins": 28
+        }
+      },
+      "topChampions": [
+        {
+          "champion": "Kaisa",
+          "games": 12,
+          "wins": 9
+        },
+        {
+          "champion": "Xayah",
+          "games": 10,
+          "wins": 5
+        },
+        {
+          "champion": "MissFortune",
+          "games": 6,
+          "wins": 5
+        },
+        {
+          "champion": "Caitlyn",
+          "games": 6,
+          "wins": 3
+        },
+        {
+          "champion": "Draven",
+          "games": 4,
+          "wins": 3
+        },
+        {
+          "champion": "Samira",
+          "games": 3,
+          "wins": 0
+        },
+        {
+          "champion": "Karma",
+          "games": 1,
+          "wins": 1
+        },
+        {
+          "champion": "Brand",
+          "games": 1,
+          "wins": 0
+        },
+        {
+          "champion": "Malzahar",
+          "games": 1,
+          "wins": 0
+        },
+        {
+          "champion": "Lucian",
+          "games": 1,
+          "wins": 0
+        }
+      ],
+      "roles": [
+        {
+          "teamPosition": "BOTTOM",
+          "games": 45
+        },
+        {
+          "teamPosition": "UTILITY",
+          "games": 4
+        },
+        {
+          "teamPosition": "JUNGLE",
+          "games": 1
+        }
+      ],
+      "frequentTeammates": [
+        {
+          "puuid": "KX_6Ys-FjMgCXYzFffA5lI3QYQhrMTr3zVe-GGfuWv3LkS1e0cYhFTQxn2ECOY4jxNrVCYwAoID4dQ",
+          "summonerName": "H03A55N1994",
+          "tagLine": "FFG",
+          "gamesTogether": 24,
+          "winsTogether": 16,
+          "lastPlayedAt": 1761425097743,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "JUNGLE"
+            ],
+            [
+              "BOTTOM",
+              "UTILITY"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Karma",
+              "Xayah"
+            ],
+            [
+              "Kaisa",
+              "Naafiri"
+            ],
+            [
+              "Draven",
+              "Karma"
+            ]
+          ]
+        },
+        {
+          "puuid": "y5yWsKP1610Aw9QzVFPogzfOw3O0aw1ZU6-pCB3yXFORAxEZx6srW70ZprQAkNUgk2fXxtI8ZcugkA",
+          "summonerName": "TheRuinedKing",
+          "tagLine": "FFG",
+          "gamesTogether": 23,
+          "winsTogether": 14,
+          "lastPlayedAt": 1761425097743,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "TOP"
+            ],
+            [
+              "BOTTOM",
+              "JUNGLE"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Jax",
+              "Kaisa"
+            ],
+            [
+              "DrMundo",
+              "MissFortune"
+            ],
+            [
+              "Caitlyn",
+              "Jax"
+            ]
+          ]
+        },
+        {
+          "puuid": "8QrQjWfmaFYL_SPi2fx0mumsKm4h51h9AiKLU2JRLFOhjIAAcROUiUKh7C5rxr2ykqNiWl_Uff0EUg",
+          "summonerName": "RivenCarryMe",
+          "tagLine": "EUW",
+          "gamesTogether": 14,
+          "winsTogether": 9,
+          "lastPlayedAt": 1761425097743,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "MIDDLE"
+            ],
+            [
+              "JUNGLE",
+              "MIDDLE"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Kaisa",
+              "Leblanc"
+            ],
+            [
+              "Leblanc",
+              "Xayah"
+            ],
+            [
+              "Draven",
+              "Zed"
+            ]
+          ]
+        },
+        {
+          "puuid": "Fi_Qi2V5J7sROlAA5PmA6viJSYKlLOgopL7AsCjhhHTIMPVY5aePwQkeZenUSyd29wkzW7zY2u4kpQ",
+          "summonerName": "FFG Aziz",
+          "tagLine": "FFG",
+          "gamesTogether": 12,
+          "winsTogether": 6,
+          "lastPlayedAt": 1760300468756,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "JUNGLE"
+            ],
+            [
+              "BOTTOM",
+              "MIDDLE"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Caitlyn",
+              "Vi"
+            ],
+            [
+              "Caitlyn",
+              "Diana"
+            ],
+            [
+              "Viktor",
+              "Xayah"
+            ]
+          ]
+        },
+        {
+          "puuid": "8KtkLA1Jo7I-V_GMR5sWA8Iq5Sy_-ZC5KRr_W1331BbKm8gELVrMPsPPkCsn5ySHSrAP06weXoQqUg",
+          "summonerName": "Sh1n",
+          "tagLine": "1506",
+          "gamesTogether": 11,
+          "winsTogether": 4,
+          "lastPlayedAt": 1761422383030,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "UTILITY"
+            ],
+            [
+              "BOTTOM",
+              "MIDDLE"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "MissFortune",
+              "Rell"
+            ],
+            [
+              "Caitlyn",
+              "Lux"
+            ],
+            [
+              "Lux",
+              "Malzahar"
+            ]
+          ]
+        },
+        {
+          "puuid": "jI8JxPCIUNrOGlTlSicwXwZDLGs7h0KyMI1Ue-lZFkjb5pY2c8GGdP_z4aUG1qveB95fNjzw7D6C2Q",
+          "summonerName": "TheRegardedKing",
+          "tagLine": "KRALI",
+          "gamesTogether": 11,
+          "winsTogether": 5,
+          "lastPlayedAt": 1760210471830,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "MIDDLE"
+            ],
+            [
+              "BOTTOM",
+              "JUNGLE"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Caitlyn",
+              "Lissandra"
+            ],
+            [
+              "Kaisa",
+              "Senna"
+            ],
+            [
+              "Soraka",
+              "Xayah"
+            ]
+          ]
+        },
+        {
+          "puuid": "fBo38EwUp8ygyf0lGLU0_x0lJFpLuELb1EvZ1iDinY2o630-Lhy3HciDRrGdDRbdwKgw1eNw2yL0RA",
+          "summonerName": "Sapphirix",
+          "tagLine": "FFG",
+          "gamesTogether": 11,
+          "winsTogether": 6,
+          "lastPlayedAt": 1760035633110,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "UTILITY"
+            ],
+            [
+              "BOTTOM",
+              "TOP"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Kaisa",
+              "TahmKench"
+            ],
+            [
+              "Orianna",
+              "Xayah"
+            ],
+            [
+              "Caitlyn",
+              "Zyra"
+            ]
+          ]
+        },
+        {
+          "puuid": "W5L4GxPpd_9WDEi9k5unRCKOxMMhloFAOTCIdZGaPMVTNXGcixIFr_meEebSDtVkb9xrW1liOSNU1g",
+          "summonerName": "Avrion",
+          "tagLine": "FFG",
+          "gamesTogether": 8,
+          "winsTogether": 5,
+          "lastPlayedAt": 1760035633110,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "UTILITY"
+            ],
+            [
+              "BOTTOM",
+              "TOP"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Blitzcrank",
+              "Kaisa"
+            ],
+            [
+              "Thresh",
+              "Xayah"
+            ],
+            [
+              "Samira",
+              "Thresh"
+            ]
+          ]
+        },
+        {
+          "puuid": "sS0wKDNAJyi7tCy6JlBVX_ZFjYIsNXpHZ4W9bPH3cbZmAKZ02YgXy3lMsYHtceNSN5T5sh161b56-A",
+          "summonerName": "KaffiChruune",
+          "tagLine": "FFG",
+          "gamesTogether": 8,
+          "winsTogether": 4,
+          "lastPlayedAt": 1759870540324,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "UTILITY"
+            ],
+            [
+              "BOTTOM",
+              "TOP"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Blitzcrank",
+              "Kaisa"
+            ],
+            [
+              "Blitzcrank",
+              "MissFortune"
+            ],
+            [
+              "Blitzcrank",
+              "Xayah"
+            ]
+          ]
+        },
+        {
+          "puuid": "sChcq4R2fcNrb4GdmlX_QTGiTzu2EH6UewXiCoVMagMElmkduSQSK41OFa4mkMzEeYgwkZ8yRWZgsA",
+          "summonerName": "Strainque",
+          "tagLine": "9207",
+          "gamesTogether": 7,
+          "winsTogether": 7,
+          "lastPlayedAt": 1760300468756,
+          "topRolePairs": [
+            [
+              "BOTTOM",
+              "MIDDLE"
+            ],
+            [
+              "BOTTOM",
+              "UTILITY"
+            ]
+          ],
+          "topChampionPairs": [
+            [
+              "Kaisa",
+              "Katarina"
+            ],
+            [
+              "Caitlyn",
+              "Senna"
+            ],
+            [
+              "Heimerdinger",
+              "Xayah"
+            ]
+          ]
+        }
+      ],
+      "meta": {
+        "queueFilter": [
+          420,
+          440
+        ],
+        "sampleSize": 50,
+        "generatedAt": 1761438769266
+      }
+    },
+    "summaryPath": "C:\\Projekte\\RiftRewindHackathon\\packages\\backend\\data\\temp\\626e5306-e678-4d8a-b39b-5767a6c98f4e\\summary.player.json"
+  }
+}

@@ -1,14 +1,22 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from '../home/home.component';
-import { SummonerProfileComponent } from './summoner-profile/summoner-profile.component';
+import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: HomeComponent
-    },
-    {
-        path: 'summoner/:region/:gameName/:tagLine',
-        component: SummonerProfileComponent
-    }
+  {
+    path: '',
+    component: HomeComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    pathMatch: 'full'
+  }
 ];

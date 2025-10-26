@@ -1,0 +1,13 @@
+{
+  "id": "74e6e7c5-2293-4083-8653-b9b12bbd9f8c",
+  "status": "error",
+  "gameName": "Sapphirix",
+  "tagLine": "FFG",
+  "region": "EUW",
+  "limit": 20,
+  "createdAt": 1761428405792,
+  "updatedAt": 1761428405877,
+  "startedAt": 1761428405803,
+  "completedAt": 1761428405876,
+  "error": "Script execution failed with code 4294967295\n"
+}
