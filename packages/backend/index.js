@@ -1,43 +1,68 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs').promises;
+const pino = require('pino');
+const pinoHttp = require('pino-http');
 
+const { validate } = require('./utils/env');
+const { createFsStorage, createS3Storage } = require('./utils/storage');
 const JobManager = require('./utils/jobManager');
-const { executeRiotScript } = require('./utils/scriptExecutor');
 const { generatePlayerSummary } = require('./utils/summaryGenerator');
 const { generateDuoSummary } = require('./utils/duoSummaryGenerator');
+const { createRiotClient } = require('./utils/riotClient');
+const { callBedrock, buildDuoPrompt } = require('./utils/bedrock');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, process.env.DATA_DIR || 'data');
+const cfg = validate();
+const PORT = cfg.PORT || 3000;
+const DATA_DIR = path.join(__dirname, cfg.DATA_DIR || 'data');
 
-// Ensure RIOT_API_KEY is set
-if (!process.env.RIOT_API_KEY) {
-  console.error('❌ ERROR: RIOT_API_KEY is not set in .env file');
-  process.exit(1);
-}
+// Logger
+const baseLogger = pino({ level: cfg.LOG_LEVEL || 'info' });
+app.use(pinoHttp({
+  logger: baseLogger,
+  genReqId: (req) => req.headers['x-request-id'] || undefined,
+}));
+
+// Storage
+const storage = cfg.DATA_BACKEND === 's3'
+  ? createS3Storage({ bucket: cfg.S3_BUCKET, prefix: cfg.S3_PREFIX })
+  : createFsStorage(DATA_DIR);
 
 // Initialize job manager
-const jobManager = new JobManager(DATA_DIR);
+const jobManager = new JobManager(DATA_DIR, storage);
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:4200',
+  origin: cfg.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json());
 
+// Rate limiting
+app.use('/api/', rateLimit({ windowMs: 60 * 1000, max: 60, standardHeaders: true, legacyHeaders: false }));
+
+// jobId correlation middleware
+app.use((req, _res, next) => {
+  const jobId = req.params?.jobId || req.query?.jobId || req.headers['x-job-id'];
+  if (jobId && req.log) req.log = req.log.child({ jobId });
+  next();
+});
+
 // Initialize data directory on startup
 async function initDataDirectory() {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.mkdir(path.join(DATA_DIR, 'jobs'), { recursive: true });
-    console.log('✅ Data directory initialized:', DATA_DIR);
-  } catch (error) {
-    console.error('❌ Failed to create data directory:', error);
-    process.exit(1);
+  if (storage.backend === 'fs') {
+    try {
+      await fs.mkdir(DATA_DIR, { recursive: true });
+      await fs.mkdir(path.join(DATA_DIR, 'jobs'), { recursive: true });
+      console.log('✅ Data directory initialized:', DATA_DIR);
+    } catch (error) {
+      console.error('❌ Failed to create data directory:', error);
+      process.exit(1);
+    }
   }
 }
 
@@ -45,15 +70,21 @@ async function initDataDirectory() {
 // ENDPOINTS
 // ============================================================================
 
-// Simple test endpoint
-app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: 'API connected',
-    config: {
-      dataDir: DATA_DIR,
-      hasApiKey: !!process.env.RIOT_API_KEY
-    }
-  });
+// Healthcheck: verify storage read/write
+app.get('/api/test', async (req, res) => {
+  const t = Date.now();
+  const key = `healthcheck/health-${t}.txt`;
+  let writeable = false;
+  try {
+    await storage.writeText(key, 'ok');
+    const v = await storage.readText(key);
+    writeable = v.trim() === 'ok';
+  } catch (e) {
+    req.log?.warn({ err: e }, 'healthcheck read/write failed');
+  } finally {
+    try { await storage.deleteObject(key); } catch (_) {}
+  }
+  res.json({ ok: true, time: new Date().toISOString(), dataBackend: storage.backend, writeable });
 });
 
 /**
@@ -238,6 +269,30 @@ app.get('/api/duo/:puuidA/:puuidB', async (req, res) => {
   }
 });
 
+// Bedrock MVP route (feature-flag)
+app.post('/api/duo/ai', async (req, res) => {
+  try {
+    if (!cfg.ENABLE_BEDROCK) {
+      return res.status(404).json({ code: 'BEDROCK_DISABLED', message: 'Bedrock not enabled' });
+    }
+    const { puuidA, puuidB, region } = req.body || {};
+    if (!puuidA || !puuidB || !region) {
+      return res.status(400).json({ code: 'BAD_REQUEST', message: 'puuidA, puuidB, region required' });
+    }
+    const recentJob = await findRecentJobByPuuid(puuidA, region.toUpperCase());
+    if (!recentJob) {
+      return res.status(404).json({ code: 'NOT_FOUND', message: 'No recent data found. Fetch player first.' });
+    }
+    const duoSummary = await generateDuoSummary({ puuidA, puuidB, matchesDir: recentJob.outputDir, region: region.toUpperCase() });
+    const prompt = buildDuoPrompt(duoSummary);
+    const text = await callBedrock({ region: cfg.BEDROCK_REGION, modelId: cfg.BEDROCK_MODEL_ID, inputText: prompt });
+    res.json({ text });
+  } catch (error) {
+    req.log?.error({ err: error, code: error.code }, 'bedrock route error');
+    res.status(500).json({ code: 'BEDROCK_ERROR', message: error.message, details: error.details });
+  }
+});
+
 // ============================================================================
 // JOB PROCESSING & HELPER FUNCTIONS
 // ============================================================================
@@ -344,15 +399,40 @@ async function processJob(jobId) {
     const jobOutdir = path.join(DATA_DIR, 'temp', jobId);
     await fs.mkdir(jobOutdir, { recursive: true });
 
-    // Execute the Riot API script
+    // Fetch from Riot API using JS client
     console.log(`🎮 Fetching data for ${gameName}#${tagLine} (${region})`);
-    const scriptResult = await executeRiotScript({
-      gameName,
-      tagLine,
-      region,
-      count: limit,
-      outdir: jobOutdir
-    });
+    const riot = createRiotClient({ apiKey: cfg.RIOT_API_KEY, logger: baseLogger });
+    const account = await riot.getAccountByRiotId(region, gameName, tagLine);
+    const puuid = account.puuid;
+    const ts = new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z');
+    const safeName = String(gameName).replace(/\s+/g, '_');
+
+    const accountFile = path.join(jobOutdir, `account_${safeName}_${tagLine}_${ts}.json`);
+    await fs.writeFile(accountFile, JSON.stringify(account, null, 2), 'utf8');
+
+    let summoner = null;
+    try {
+      summoner = await riot.getSummonerByPuuid(region, puuid);
+      const summonerFile = path.join(jobOutdir, `summoner_${safeName}_${tagLine}_${ts}.json`);
+      await fs.writeFile(summonerFile, JSON.stringify(summoner, null, 2), 'utf8');
+    } catch (e) {
+      // Summoner is optional; proceed
+      baseLogger.warn({ err: e.message }, 'summoner fetch failed');
+    }
+
+    const ids = await riot.getMatchIds(region, puuid, limit);
+    // Fetch matches with concurrency built-in
+    const matches = [];
+    for (const id of ids) {
+      try {
+        const match = await riot.getMatch(region, id);
+        matches.push(match);
+      } catch (e) {
+        baseLogger.warn({ id, err: e.message }, 'match fetch failed');
+      }
+    }
+    const matchesFile = path.join(jobOutdir, `matches_${safeName}_${tagLine}_${ts}.json`);
+    await fs.writeFile(matchesFile, JSON.stringify(matches, null, 2), 'utf8');
 
     // Generate player summary
     console.log(`📊 Generating player summary...`);
@@ -374,7 +454,6 @@ async function processJob(jobId) {
 
     // Mark job as complete
     await jobManager.markComplete(jobId, {
-      ...scriptResult,
       outputDir: jobOutdir,
       summary,
       summaryPath

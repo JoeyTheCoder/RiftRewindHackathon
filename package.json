@@ -8,7 +8,11 @@
     "build": "pnpm --recursive --filter \"./packages/*\" build",
     "test": "pnpm --recursive --filter \"./packages/*\" test",
     "lint": "pnpm --recursive --filter \"./packages/*\" lint",
-    "clean": "pnpm --recursive --filter \"./packages/*\" clean"
+    "clean": "pnpm --recursive --filter \"./packages/*\" clean",
+    "start": "pnpm --filter ./packages/backend start",
+    "test:boot": "pnpm --filter ./packages/backend test:boot",
+    "deploy:api": "sam build && sam deploy --guided",
+    "build:frontend": "cd packages/frontend && pnpm build"
   },
   "keywords": [
     "league-of-legends",

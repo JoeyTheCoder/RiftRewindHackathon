@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
 
 /**
  * Generate player summary from match data
@@ -19,23 +18,14 @@ async function generatePlayerSummary(params) {
   console.log(`📊 Generating player summary for ${gameName}#${tagLine}...`);
   console.log(`   Looking in directory: ${jobOutdir}`);
 
-  // Use WSL to list and read files directly (bypasses filesystem sync issues)
-  const wslPath = jobOutdir.replace(/\\/g, '/').replace(/^([A-Z]):/, (_, drive) => 
-    `/mnt/${drive.toLowerCase()}`
-  );
-  
-  console.log(`   WSL path: ${wslPath}`);
-  
-  // List files using WSL
-  let filesOutput;
+  // List files using Node fs
+  let files;
   try {
-    filesOutput = execSync(`wsl ls "${wslPath}"`, { encoding: 'utf8' });
+    files = await fs.readdir(jobOutdir);
   } catch (error) {
-    throw new Error(`Failed to list files in WSL directory: ${error.message}`);
+    throw new Error(`Failed to list files in directory: ${error.message}`);
   }
-  
-  const files = filesOutput.trim().split('\n').filter(f => f);
-  console.log(`   Found ${files.length} files via WSL:`, files);
+  console.log(`   Found ${files.length} files:`, files);
   
   const accountFile = files.find(f => f.startsWith('account_'));
   const summonerFile = files.find(f => f.startsWith('summoner_'));
@@ -47,29 +37,19 @@ async function generatePlayerSummary(params) {
     throw new Error(`Missing required data files. Found: account=${!!accountFile}, matches=${!!matchesFile}`);
   }
 
-  // Read the JSON files using WSL cat
-  console.log(`   Reading files via WSL...`);
-  const accountData = JSON.parse(
-    execSync(`wsl cat "${wslPath}/${accountFile}"`, { encoding: 'utf8' })
-  );
-  const matchesData = JSON.parse(
-    execSync(`wsl cat "${wslPath}/${matchesFile}"`, { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }) // 50MB buffer for large match files
-  );
+  // Read the JSON files using fs
+  console.log(`   Reading files...`);
+  const accountData = JSON.parse(await fs.readFile(path.join(jobOutdir, accountFile), 'utf8'));
+  const matchesData = JSON.parse(await fs.readFile(path.join(jobOutdir, matchesFile), 'utf8'));
   
   let summonerData = null;
   let leagueData = null;
   
   if (summonerFile) {
-    summonerData = JSON.parse(
-      execSync(`wsl cat "${wslPath}/${summonerFile}"`, { encoding: 'utf8' })
-    );
-    
-    // Try to find league entries file
+    summonerData = JSON.parse(await fs.readFile(path.join(jobOutdir, summonerFile), 'utf8'));
     const leagueFile = files.find(f => f.startsWith('league_entries_'));
     if (leagueFile) {
-      leagueData = JSON.parse(
-        execSync(`wsl cat "${wslPath}/${leagueFile}"`, { encoding: 'utf8' })
-      );
+      leagueData = JSON.parse(await fs.readFile(path.join(jobOutdir, leagueFile), 'utf8'));
     }
   }
 

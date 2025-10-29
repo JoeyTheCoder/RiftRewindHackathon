@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: That's My Duo - Serverless MVP (S3 + Lambda + HTTP API + Secrets)
+
+Parameters:
+  AppName:
+    Type: String
+    Default: tmd
+  Region:
+    Type: String
+    Default: us-east-1
+  FrontendBucketName:
+    Type: String
+    Description: S3 bucket name for hosting the Angular app
+  DataBucketName:
+    Type: String
+    Description: S3 bucket name for backend data (jobs and temp files)
+  RiotSecretId:
+    Type: String
+    Description: Secrets Manager SecretId containing the Riot API key
+  FrontendUrl:
+    Type: String
+    Description: Exact origin URL of the frontend for CORS (e.g. https://dxxxx.cloudfront.net)
+  BedrockRegion:
+    Type: String
+    Default: ''
+  BedrockModelId:
+    Type: String
+    Default: ''
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 30
+    MemorySize: 512
+    Architectures: [ x86_64 ]
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV: production
+        DATA_BACKEND: s3
+        S3_BUCKET: !Ref DataBucketName
+        RIOT_SECRET_ID: !Ref RiotSecretId
+        FRONTEND_URL: !Ref FrontendUrl
+        ENABLE_BEDROCK: !If [UseBedrock, 'true', 'false']
+        BEDROCK_REGION: !Ref BedrockRegion
+        BEDROCK_MODEL_ID: !Ref BedrockModelId
+
+Conditions:
+  UseBedrock: !And [ !Not [ !Equals [ !Ref BedrockRegion, '' ] ], !Not [ !Equals [ !Ref BedrockModelId, '' ] ] ]
+
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref DataBucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref FrontendBucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref FrontendUrl
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+          - X-Requested-With
+          - x-job-id
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+
+  BackendFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-backend"
+      Description: Express backend wrapped by serverless-express
+      CodeUri: .
+      Handler: lambda/handler.handler
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Sub arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${RiotSecretId}*
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+                - s3:GetObject
+                - s3:ListBucket
+                - s3:DeleteObject
+              Resource:
+                - !Sub arn:${AWS::Partition}:s3:::${DataBucketName}
+                - !Sub arn:${AWS::Partition}:s3:::${DataBucketName}/*
+      Events:
+        ApiAnyProxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /api/{proxy+}
+            Method: ANY
+        ApiRoot:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /api
+            Method: ANY
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+          - lambda/handler.ts
+        External:
+          - aws-sdk
+
+Outputs:
+  HttpApiUrl:
+    Description: Base URL of the HTTP API
+    Value: !Sub 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com'
+  FrontendBucketOut:
+    Description: Frontend bucket name
+    Value: !Ref FrontendBucketName
+  DataBucketOut:
+    Description: Data bucket name
+    Value: !Ref DataBucketName
+
+
