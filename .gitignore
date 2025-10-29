@@ -163,6 +163,8 @@ Thumbs.db
 
 # AWS specific
 .aws/
+.aws-sam/
+samconfig.toml
 
 # Local development
 .local/

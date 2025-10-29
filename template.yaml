@@ -88,7 +88,7 @@ Resources:
     Properties:
       FunctionName: !Sub "${AppName}-backend"
       Description: Express backend wrapped by serverless-express
-      CodeUri: .
+      CodeUri: packages/backend
       Handler: lambda/handler.handler
       Policies:
         - Version: '2012-10-17'
