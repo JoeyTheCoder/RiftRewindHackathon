@@ -82,6 +82,7 @@ Resources:
           - GET
           - POST
           - OPTIONS
+        AllowCredentials: true
 
   BackendFunction:
     Type: AWS::Serverless::Function

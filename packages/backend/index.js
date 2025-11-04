@@ -36,8 +36,13 @@ const storage = cfg.DATA_BACKEND === 's3'
 const jobManager = new JobManager(DATA_DIR, storage);
 
 // Middleware
+// Support comma-separated list in FRONTEND_URL (e.g., "https://a.com,https://b.com")
+const allowedOrigins = String(cfg.FRONTEND_URL || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
 app.use(cors({
-  origin: cfg.FRONTEND_URL,
+  origin: allowedOrigins.length ? allowedOrigins : cfg.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json());

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, interval, switchMap, takeWhile, map } from 'rxjs';
 
@@ -73,7 +74,7 @@ export interface PlayerSummary {
   providedIn: 'root'
 })
 export class RiotApiService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

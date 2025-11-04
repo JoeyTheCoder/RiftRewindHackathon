@@ -30,14 +30,27 @@ async function resolveRiotApiKey(cfg, logger) {
     e.code = 'RIOT_SECRET_EMPTY';
     throw e;
   }
-  logger?.info({ secretId: cfg.RIOT_SECRET_ID }, 'Loaded Riot API key from Secrets Manager');
-  return resp.SecretString;
+  let value = resp.SecretString.trim();
+  // Support either raw token or JSON like {"RIOT_API_KEY":"..."}
+  try {
+    const parsed = JSON.parse(value);
+    value = parsed.RIOT_API_KEY || parsed.riotApiKey || value;
+  } catch (_) {
+    // not JSON, keep as-is
+  }
+  if (!/^RGAPI-/.test(value)) {
+    const m = value.match(/RGAPI-[A-Za-z0-9-]+/);
+    if (m) value = m[0];
+  }
+  logger?.info({ secretId: cfg.RIOT_SECRET_ID, length: value.length, looksValid: /^RGAPI-/.test(value) }, 'Loaded Riot API key from Secrets Manager');
+  return value;
 }
 
 function createApp() {
   const app = express();
   const cfg = validate();
-  const DATA_DIR = path.join(__dirname, cfg.DATA_DIR || 'data');
+  const dataRoot = cfg.DATA_BACKEND === 's3' ? '/tmp' : __dirname;
+  const DATA_DIR = path.join(dataRoot, cfg.DATA_DIR || 'data');
 
   // Logger
   const baseLogger = pino({ level: cfg.LOG_LEVEL || 'info' });
@@ -55,7 +68,12 @@ function createApp() {
   const jobManager = new JobManager(DATA_DIR, storage);
 
   // Middleware
-  app.use(cors({ origin: cfg.FRONTEND_URL, credentials: true }));
+  // Support comma-separated list in FRONTEND_URL (e.g., "https://a.com,https://b.com")
+  const allowedOrigins = String(cfg.FRONTEND_URL || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+  app.use(cors({ origin: allowedOrigins.length ? allowedOrigins : cfg.FRONTEND_URL, credentials: true }));
   app.use(express.json());
   app.use('/api/', rateLimit({ windowMs: 60 * 1000, max: 60, standardHeaders: true, legacyHeaders: false }));
   app.use((req, _res, next) => {
