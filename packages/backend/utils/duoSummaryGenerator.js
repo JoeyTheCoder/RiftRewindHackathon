@@ -80,6 +80,7 @@ async function generateDuoSummary(params) {
   const championPairCounts = {};
   const rolePairCounts = {};
   const patchCounts = {};
+  const sideCounts = { blue: 0, red: 0 };
   
   let totalGameDuration = 0;
   let totalCombinedKA = 0;
@@ -133,6 +134,10 @@ async function generateDuoSummary(params) {
 
     // Game duration
     totalGameDuration += info.gameDuration || 0;
+
+    // Track side (blue=100, red=200)
+    const side = playerA.teamId === 100 ? 'blue' : 'red';
+    sideCounts[side]++;
 
     // Patch tracking
     const version = info.gameVersion || '';
@@ -196,6 +201,10 @@ async function generateDuoSummary(params) {
   // Game texture
   summary.gameTexture = {
     avgGameDurationMin: Math.round((totalGameDuration / matchCount / 60) * 10) / 10,
+    sidePreference: {
+      blue: sideCounts.blue,
+      red: sideCounts.red
+    },
     byPatch: Object.entries(patchCounts)
       .map(([patch, data]) => ({ patch, games: data.games, wins: data.wins }))
       .sort((a, b) => b.games - a.games)

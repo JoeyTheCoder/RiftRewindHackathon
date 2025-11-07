@@ -60,12 +60,8 @@ Resources:
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
 
-  FrontendBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref FrontendBucketName
-      WebsiteConfiguration:
-        IndexDocument: index.html
+  # FrontendBucket managed manually outside CloudFormation
+  # Bucket: tmd.sapphirix.ch with static website hosting enabled
 
   Api:
     Type: AWS::Serverless::HttpApi
@@ -107,6 +103,16 @@ Resources:
               Resource:
                 - !Sub arn:${AWS::Partition}:s3:::${DataBucketName}
                 - !Sub arn:${AWS::Partition}:s3:::${DataBucketName}/*
+            - !If
+              - UseBedrock
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                  - bedrock:ListFoundationModels
+                  - bedrock:GetFoundationModel
+                Resource: "*"
+              - !Ref AWS::NoValue
       Events:
         ApiAnyProxy:
           Type: HttpApi
@@ -132,11 +138,11 @@ Outputs:
   HttpApiUrl:
     Description: Base URL of the HTTP API
     Value: !Sub 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com'
-  FrontendBucketOut:
-    Description: Frontend bucket name
-    Value: !Ref FrontendBucketName
   DataBucketOut:
     Description: Data bucket name
     Value: !Ref DataBucketName
+  FrontendUrl:
+    Description: Frontend URL (managed outside CloudFormation)
+    Value: !Ref FrontendUrl
 
 

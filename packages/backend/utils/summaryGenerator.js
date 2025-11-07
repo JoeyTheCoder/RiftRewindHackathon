@@ -72,6 +72,7 @@ async function generatePlayerSummary(params) {
     topChampions: calculateTopChampions(rankedMatches, puuid),
     roles: calculateRoles(rankedMatches, puuid),
     frequentTeammates: calculateFrequentTeammates(rankedMatches, puuid),
+    playstyle: calculatePlaystyleMetrics(rankedMatches, puuid),
     meta: {
       queueFilter: [420, 440],
       sampleSize: rankedMatches.length,
@@ -253,6 +254,58 @@ function calculateFrequentTeammates(matches, puuid) {
       topChampionPairs
     };
   });
+}
+
+/**
+ * Calculate playstyle metrics (for AI insights)
+ */
+function calculatePlaystyleMetrics(matches, puuid) {
+  let totalKills = 0;
+  let totalDeaths = 0;
+  let totalAssists = 0;
+  let totalKillParticipation = 0;
+  let totalVisionScore = 0;
+  let totalTeamDamageShare = 0;
+  let countWithKP = 0;
+  let countWithDamageShare = 0;
+
+  for (const match of matches) {
+    const participant = match.info.participants.find(p => p.puuid === puuid);
+    if (!participant) continue;
+
+    totalKills += participant.kills || 0;
+    totalDeaths += participant.deaths || 0;
+    totalAssists += participant.assists || 0;
+    totalVisionScore += participant.visionScore || 0;
+
+    if (participant.challenges?.killParticipation !== undefined) {
+      totalKillParticipation += participant.challenges.killParticipation;
+      countWithKP++;
+    }
+
+    if (participant.challenges?.teamDamagePercentage !== undefined) {
+      totalTeamDamageShare += participant.challenges.teamDamagePercentage;
+      countWithDamageShare++;
+    }
+  }
+
+  const matchCount = matches.length || 1;
+  const deaths = totalDeaths || 1; // avoid division by zero
+
+  return {
+    avgKDA: Math.round(((totalKills + totalAssists) / deaths) * 100) / 100,
+    avgKillParticipation: countWithKP > 0 
+      ? Math.round((totalKillParticipation / countWithKP) * 100) / 100 
+      : null,
+    avgVisionScore: Math.round((totalVisionScore / matchCount) * 10) / 10,
+    avgTeamDamageShare: countWithDamageShare > 0 
+      ? Math.round((totalTeamDamageShare / countWithDamageShare) * 100) / 100 
+      : null,
+    totalGames: matchCount,
+    totalKills,
+    totalDeaths,
+    totalAssists
+  };
 }
 
 module.exports = {

@@ -13,7 +13,7 @@ const JobManager = require('./utils/jobManager');
 const { generatePlayerSummary } = require('./utils/summaryGenerator');
 const { generateDuoSummary } = require('./utils/duoSummaryGenerator');
 const { createRiotClient } = require('./utils/riotClient');
-const { callBedrock, buildDuoPrompt } = require('./utils/bedrock');
+const { generatePlayerInsights, generateDuoInsights } = require('./utils/bedrock');
 
 const app = express();
 const cfg = validate();
@@ -109,7 +109,7 @@ app.post('/api/start', async (req, res) => {
       });
     }
 
-    // Cap limit at 100
+    // Cap limit at 100 (default 50 for good balance of data vs speed)
     const cappedLimit = Math.min(Math.max(parseInt(limit) || 50, 1), 100);
 
     // CACHING DISABLED FOR NOW - causes too many issues
@@ -160,17 +160,19 @@ app.get('/api/status/:jobId', async (req, res) => {
     // Return job status
     const response = {
       status: job.status,
-      progress: {
-        gameName: job.gameName,
-        tagLine: job.tagLine,
-        region: job.region,
-        limit: job.limit
-      }
+      progress: job.progress || 0,  // Progress percentage (0-100)
+      progressMessage: job.progressMessage || 'Processing...',
+      gameName: job.gameName,
+      tagLine: job.tagLine,
+      region: job.region,
+      limit: job.limit
     };
 
     if (job.status === 'complete' && job.result) {
       response.resultPath = `/api/result/${jobId}`;
       response.result = job.result;
+      response.progress = 100;
+      response.progressMessage = 'Complete';
     }
 
     if (job.status === 'error' && job.error) {
@@ -254,7 +256,9 @@ app.get('/api/duo/:puuidA/:puuidB', async (req, res) => {
     }
 
     console.log(`📊 Generating duo summary from job ${recentJob.id}`);
-    const matchesDir = recentJob.outputDir;
+    
+    // Handle old jobs that don't have outputDir field
+    const matchesDir = recentJob.outputDir || path.join(DATA_DIR, 'temp', recentJob.id);
 
     // Generate duo summary from job data
     const duoSummary = await generateDuoSummary({
@@ -274,27 +278,111 @@ app.get('/api/duo/:puuidA/:puuidB', async (req, res) => {
   }
 });
 
-// Bedrock MVP route (feature-flag)
+// Bedrock AI summary for duo (feature-flag)
 app.post('/api/duo/ai', async (req, res) => {
   try {
     if (!cfg.ENABLE_BEDROCK) {
-      return res.status(404).json({ code: 'BEDROCK_DISABLED', message: 'Bedrock not enabled' });
+      return res.json({ text: 'AI insights are disabled in this environment.' });
     }
-    const { puuidA, puuidB, region } = req.body || {};
+    
+    const { puuidA, puuidB, region, names } = req.body || {};
     if (!puuidA || !puuidB || !region) {
-      return res.status(400).json({ code: 'BAD_REQUEST', message: 'puuidA, puuidB, region required' });
+      return res.status(400).json({ 
+        code: 'BAD_REQUEST', 
+        message: 'puuidA, puuidB, and region are required' 
+      });
     }
+    
     const recentJob = await findRecentJobByPuuid(puuidA, region.toUpperCase());
     if (!recentJob) {
-      return res.status(404).json({ code: 'NOT_FOUND', message: 'No recent data found. Fetch player first.' });
+      return res.status(404).json({ 
+        code: 'NOT_FOUND', 
+        message: 'No recent data found. Fetch player first.' 
+      });
     }
-    const duoSummary = await generateDuoSummary({ puuidA, puuidB, matchesDir: recentJob.outputDir, region: region.toUpperCase() });
-    const prompt = buildDuoPrompt(duoSummary);
-    const text = await callBedrock({ region: cfg.BEDROCK_REGION, modelId: cfg.BEDROCK_MODEL_ID, inputText: prompt });
+    
+    // Handle old jobs that don't have outputDir field
+    const matchesDir = recentJob.outputDir || path.join(DATA_DIR, 'temp', recentJob.id);
+    
+    const duoSummary = await generateDuoSummary({ 
+      puuidA, 
+      puuidB, 
+      matchesDir, 
+      region: region.toUpperCase() 
+    });
+    
+    const text = await generateDuoInsights(duoSummary, names);
     res.json({ text });
   } catch (error) {
-    req.log?.error({ err: error, code: error.code }, 'bedrock route error');
-    res.status(500).json({ code: 'BEDROCK_ERROR', message: error.message, details: error.details });
+    baseLogger.error({ err: error }, 'Duo AI insights error');
+    res.status(500).json({ 
+      code: 'BEDROCK_ERROR', 
+      message: error.message 
+    });
+  }
+});
+
+// Bedrock AI summary for player (feature-flag)
+app.post('/api/player/ai', async (req, res) => {
+  try {
+    if (!cfg.ENABLE_BEDROCK) {
+      return res.json({ text: 'AI insights are disabled in this environment.' });
+    }
+    
+    const { jobId, puuid, region } = req.body || {};
+    
+    let playerSummary;
+    
+    // Option 1: Load from jobId
+    if (jobId) {
+      const job = await jobManager.getJob(jobId);
+      if (!job) {
+        return res.status(404).json({ 
+          code: 'NOT_FOUND', 
+          message: `Job ${jobId} not found` 
+        });
+      }
+      if (job.status !== 'complete') {
+        return res.status(400).json({ 
+          code: 'JOB_NOT_COMPLETE', 
+          message: 'Job is not complete yet',
+          status: job.status 
+        });
+      }
+      playerSummary = job.result?.summary;
+    }
+    // Option 2: Load from puuid + region
+    else if (puuid && region) {
+      const recentJob = await findRecentJobByPuuid(puuid, region.toUpperCase());
+      if (!recentJob) {
+        return res.status(404).json({ 
+          code: 'NOT_FOUND', 
+          message: 'No recent data found for player' 
+        });
+      }
+      playerSummary = recentJob.result?.summary;
+    } else {
+      return res.status(400).json({ 
+        code: 'BAD_REQUEST', 
+        message: 'Either jobId or (puuid + region) required' 
+      });
+    }
+    
+    if (!playerSummary) {
+      return res.status(404).json({ 
+        code: 'SUMMARY_NOT_FOUND', 
+        message: 'Player summary not available' 
+      });
+    }
+    
+    const text = await generatePlayerInsights(playerSummary);
+    res.json({ text });
+  } catch (error) {
+    baseLogger.error({ err: error }, 'Player AI insights error');
+    res.status(500).json({ 
+      code: 'BEDROCK_ERROR', 
+      message: error.message 
+    });
   }
 });
 
@@ -397,6 +485,10 @@ async function processJob(jobId) {
 
   try {
     await jobManager.markRunning(jobId);
+    await jobManager.updateJob(jobId, { 
+      progress: 0, 
+      progressMessage: 'Starting data fetch...'
+    });
 
     const { gameName, tagLine, region, limit } = job;
 
@@ -426,16 +518,34 @@ async function processJob(jobId) {
     }
 
     const ids = await riot.getMatchIds(region, puuid, limit);
-    // Fetch matches with concurrency built-in
-    const matches = [];
-    for (const id of ids) {
+    // Fetch matches in parallel with progress tracking
+    console.log(`   Fetching ${ids.length} matches in parallel...`);
+    
+    let completedMatches = 0;
+    const matchPromises = ids.map(async (id) => {
       try {
         const match = await riot.getMatch(region, id);
-        matches.push(match);
+        completedMatches++;
+        // Update progress
+        await jobManager.updateJob(jobId, { 
+          progress: Math.round((completedMatches / ids.length) * 100),
+          progressMessage: `Fetching matches: ${completedMatches}/${ids.length}`
+        });
+        return match;
       } catch (e) {
+        completedMatches++;
         baseLogger.warn({ id, err: e.message }, 'match fetch failed');
+        await jobManager.updateJob(jobId, { 
+          progress: Math.round((completedMatches / ids.length) * 100),
+          progressMessage: `Fetching matches: ${completedMatches}/${ids.length}`
+        });
+        return null;
       }
-    }
+    });
+    
+    const matchResults = await Promise.all(matchPromises);
+    const matches = matchResults.filter(m => m !== null); // Remove failed matches
+    console.log(`   Successfully fetched ${matches.length}/${ids.length} matches`);
     const matchesFile = path.join(jobOutdir, `matches_${safeName}_${tagLine}_${ts}.json`);
     await fs.writeFile(matchesFile, JSON.stringify(matches, null, 2), 'utf8');
 

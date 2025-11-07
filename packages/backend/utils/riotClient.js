@@ -12,7 +12,7 @@ const REGIONAL_BY_REGION = {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function jitter(base) { return base * (0.5 + Math.random()); }
 
-function createRiotClient({ apiKey, logger, maxConcurrency = 5 }) {
+function createRiotClient({ apiKey, logger, maxConcurrency = 20 }) {
   if (!apiKey) throw new Error('Riot API key missing');
 
   const instance = axios.create({ timeout: 15000 });
