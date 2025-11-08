@@ -2,6 +2,7 @@
 ### Rift Rewind Hackathon 2025 – Riot Games × AWS  
 **Developer:** Sapphirix (Switzerland)  
 **Status:** ✅ Complete & Deployed  
+**🌐 Live Site:** [https://tmd.sapphirix.ch](https://tmd.sapphirix.ch)
 
 ---
 
@@ -73,7 +74,7 @@ Browser (Angular) → Cloudflare CDN → S3 (Frontend)
 
 ---
 
-## 💡 What We Learned
+## 💡 What I Learned
 
 - **Lambda timeout** limits solved with async job system.  
 - **Claude 3 Haiku** delivers fast, cheap narrative generation.  
@@ -120,7 +121,7 @@ See the [LICENSE](./LICENSE) file for details.
 
 ---
 
-## 🏷️ AWS Resource Tag (optional)
+## 🏷️ AWS Resource Tag
 
 ```
 Key:   rift-rewind-hackathon
