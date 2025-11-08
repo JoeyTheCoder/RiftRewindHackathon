@@ -109,8 +109,8 @@ pnpm dev
 
 ## 🌐 Live Demo
 
-**App:** [https://your-domain.com](https://your-domain.com)  
-**Video:** [YouTube – That’s My Duo (Demo)](https://youtube.com/...)  
+**App:** [https://tmd.sapphirix.ch](https://tmd.sapphirix.ch)  
+**Video:** [YouTube – That’s My Duo (Demo)](https://youtu.be/0YB8-iK7B9I)  
 
 ---
 
