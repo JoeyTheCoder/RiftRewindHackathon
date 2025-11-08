@@ -163,6 +163,14 @@ Thumbs.db
 
 # AWS specific
 .aws/
+.aws-sam/
+samconfig.toml
 
 # Local development
 .local/
+
+# Runtime/generated data (do not commit player data or job artifacts)
+packages/backend/data/
+
+# Local logs and tails
+tail.md

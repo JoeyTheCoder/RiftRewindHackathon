@@ -53,6 +53,37 @@
       </div>
     </div>
 
+    <!-- AI Player Insights Card -->
+    <div class="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-2xl border border-purple-500/30 p-6 shadow-2xl mb-6">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+        <span>🤖</span>
+        <span>AI Player Insights</span>
+      </h2>
+
+      <!-- Loading State -->
+      <div *ngIf="loadingPlayerAI" class="text-center py-8">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        <p class="mt-4 text-slate-300">Analyzing your gameplay...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="playerAIError && !loadingPlayerAI" class="text-center py-6">
+        <p class="text-red-400 mb-4">{{ playerAIError }}</p>
+        <button 
+          (click)="generatePlayerInsights()"
+          class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl">
+          Try Again
+        </button>
+      </div>
+
+      <!-- Insights Display -->
+      <div *ngIf="playerAIInsights && !loadingPlayerAI" class="space-y-4">
+        <div class="bg-slate-800/50 rounded-lg p-4 border border-purple-500/20">
+          <p class="text-slate-100 leading-relaxed whitespace-pre-wrap">{{ playerAIInsights }}</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
       <!-- Top Champions -->
@@ -223,11 +254,11 @@
           </div>
           <div class="bg-slate-700/30 rounded-lg p-4 text-center">
             <div class="text-3xl font-bold" [ngClass]="{
-              'text-green-400': getDuoWinRate() >= '55%',
-              'text-cyan-400': getDuoWinRate() >= '45%' && getDuoWinRate() < '55%',
-              'text-red-400': getDuoWinRate() < '45%'
+              'text-green-400': getDuoWinRate() >= 55,
+              'text-cyan-400': getDuoWinRate() >= 45 && getDuoWinRate() < 55,
+              'text-red-400': getDuoWinRate() < 45
             }">
-              {{ getDuoWinRate() }}
+              {{ getDuoWinRate() }}%
             </div>
             <div class="text-sm text-slate-400">Win Rate</div>
             <div class="text-xs text-slate-500">{{ duoSummary.wins }}W {{ duoSummary.sampleSize - duoSummary.wins }}L</div>
@@ -360,6 +391,37 @@
               <div class="text-2xl font-bold text-cyan-400">
                 {{ (duoSummary.synergy.avgTeamDamagePctB * 100).toFixed(1) }}%
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Duo Insights -->
+        <div class="bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl border border-purple-500/30 p-6 mt-6">
+          <h3 class="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+            <span>🤖</span>
+            <span>AI Duo Insights</span>
+          </h3>
+
+          <!-- Loading State -->
+          <div *ngIf="loadingDuoAI" class="text-center py-6">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+            <p class="mt-3 text-slate-300">Analyzing duo synergy...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="duoAIError && !loadingDuoAI" class="text-center py-4">
+            <p class="text-red-400 mb-4">{{ duoAIError }}</p>
+            <button 
+              (click)="generateDuoInsights()"
+              class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl">
+              Try Again
+            </button>
+          </div>
+
+          <!-- Insights Display -->
+          <div *ngIf="duoAIInsights && !loadingDuoAI" class="space-y-4">
+            <div class="bg-slate-800/50 rounded-lg p-4 border border-purple-500/20">
+              <p class="text-slate-100 leading-relaxed whitespace-pre-wrap">{{ duoAIInsights }}</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, interval, switchMap, takeWhile, map } from 'rxjs';
 
@@ -16,12 +17,12 @@ export interface StartJobResponse {
 
 export interface JobStatusResponse {
   status: 'queued' | 'running' | 'complete' | 'error';
-  progress: {
-    gameName: string;
-    tagLine: string;
-    region: string;
-    limit: number;
-  };
+  progress?: number;  // 0-100 percentage
+  progressMessage?: string;  // e.g. "Fetching matches: 25/50"
+  gameName?: string;
+  tagLine?: string;
+  region?: string;
+  limit?: number;
   resultPath?: string;
   result?: any;
   error?: string;
@@ -73,7 +74,7 @@ export interface PlayerSummary {
   providedIn: 'root'
 })
 export class RiotApiService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -129,12 +130,12 @@ export class RiotApiService {
             map(summary => ({ 
               status: { 
                 status: 'complete' as const,
-                progress: {
-                  gameName: request.gameName,
-                  tagLine: request.tagLine,
-                  region: request.region,
-                  limit: request.limit || 50
-                },
+                progress: 100,
+                progressMessage: 'Complete',
+                gameName: request.gameName,
+                tagLine: request.tagLine,
+                region: request.region,
+                limit: request.limit || 50,
                 resultPath: `/api/result/${jobId}`
               }, 
               summary 
@@ -191,6 +192,20 @@ export class RiotApiService {
       console.error('❌ Error fetching duo summary:', error);
       throw error;
     }
+  }
+
+  /**
+   * Fetch AI insights for duo analysis
+   */
+  fetchDuoAIInsights(params: { puuidA: string; puuidB: string; region: string }): Observable<{ text: string }> {
+    return this.http.post<{ text: string }>(`${this.apiUrl}/duo/ai`, params);
+  }
+
+  /**
+   * Fetch AI insights for a player based on their job ID
+   */
+  fetchPlayerAIInsights(jobId: string): Observable<{ text: string }> {
+    return this.http.post<{ text: string }>(`${this.apiUrl}/player/ai`, { jobId });
   }
 }
 

@@ -3,9 +3,10 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 class JobManager {
-  constructor(dataDir) {
+  constructor(dataDir, storage) {
     this.dataDir = dataDir;
     this.jobsDir = path.join(dataDir, 'jobs');
+    this.storage = storage;
   }
 
   /**
@@ -35,9 +36,9 @@ class JobManager {
    */
   async getJob(jobId) {
     try {
-      const jobFile = path.join(this.jobsDir, `${jobId}.json`);
-      const data = await fs.readFile(jobFile, 'utf8');
-      return JSON.parse(data);
+      const key = path.posix.join('jobs', `${jobId}.json`);
+      if (!(await this.storage.exists(key))) return null;
+      return await this.storage.readJson(key);
     } catch (error) {
       if (error.code === 'ENOENT') {
         return null;
@@ -115,8 +116,8 @@ class JobManager {
    * @returns {Promise<void>}
    */
   async saveJob(jobId, job) {
-    const jobFile = path.join(this.jobsDir, `${jobId}.json`);
-    await fs.writeFile(jobFile, JSON.stringify(job, null, 2), 'utf8');
+    const key = path.posix.join('jobs', `${jobId}.json`);
+    await this.storage.writeJson(key, job);
   }
 
   /**
@@ -125,16 +126,9 @@ class JobManager {
    */
   async getAllJobs() {
     try {
-      const files = await fs.readdir(this.jobsDir);
-      const jobFiles = files.filter(f => f.endsWith('.json'));
-      
-      const jobs = await Promise.all(
-        jobFiles.map(async (file) => {
-          const data = await fs.readFile(path.join(this.jobsDir, file), 'utf8');
-          return JSON.parse(data);
-        })
-      );
-
+      const keys = await this.storage.listKeys('jobs');
+      const jobKeys = keys.filter(k => k.endsWith('.json'));
+      const jobs = await Promise.all(jobKeys.map(k => this.storage.readJson(k)));
       return jobs.sort((a, b) => b.createdAt - a.createdAt);
     } catch (error) {
       console.error('Error reading jobs:', error);

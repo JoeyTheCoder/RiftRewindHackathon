@@ -17,6 +17,17 @@ export class ProfileComponent implements OnInit {
   duoSummary: any = null;
   loadingDuo: boolean = false;
   duoError: string = '';
+  
+  // AI Insights state
+  playerAIInsights: string = '';
+  loadingPlayerAI: boolean = false;
+  playerAIError: string = '';
+  
+  duoAIInsights: string = '';
+  loadingDuoAI: boolean = false;
+  duoAIError: string = '';
+  
+  jobId: string = '';
 
   constructor(
     private router: Router,
@@ -26,6 +37,7 @@ export class ProfileComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.summary = navigation.extras.state['summary'];
+      this.jobId = navigation.extras.state['jobId'] || '';
     }
   }
 
@@ -33,6 +45,12 @@ export class ProfileComponent implements OnInit {
     // Redirect to home if no data
     if (!this.summary) {
       this.router.navigate(['/']);
+      return;
+    }
+    
+    // Auto-generate AI insights when profile loads
+    if (this.jobId) {
+      this.generatePlayerInsights();
     }
   }
 
@@ -123,6 +141,9 @@ export class ProfileComponent implements OnInit {
         this.summary!.region
       );
       console.log('✅ Duo summary loaded:', this.duoSummary);
+      
+      // Auto-generate AI insights after duo summary loads
+      this.generateDuoInsights();
     } catch (error: any) {
       this.duoError = error.message || 'Failed to load duo summary';
       console.error('❌ Error loading duo summary:', error);
@@ -135,11 +156,65 @@ export class ProfileComponent implements OnInit {
     this.selectedTeammate = null;
     this.duoSummary = null;
     this.duoError = '';
+    this.duoAIInsights = '';
+    this.duoAIError = '';
   }
 
-  getDuoWinRate(): string {
-    if (!this.duoSummary || this.duoSummary.sampleSize === 0) return '0%';
-    return Math.round((this.duoSummary.wins / this.duoSummary.sampleSize) * 100) + '%';
+  generatePlayerInsights() {
+    if (!this.summary || !this.jobId) {
+      this.playerAIError = 'Missing job ID. Please search for the player again.';
+      return;
+    }
+
+    this.loadingPlayerAI = true;
+    this.playerAIError = '';
+    this.playerAIInsights = '';
+
+    this.riotApiService.fetchPlayerAIInsights(this.jobId).subscribe({
+      next: (response) => {
+        this.playerAIInsights = response.text;
+        this.loadingPlayerAI = false;
+        console.log('✅ Player AI insights loaded');
+      },
+      error: (error) => {
+        this.playerAIError = error.error?.message || error.message || 'Failed to generate AI insights';
+        this.loadingPlayerAI = false;
+        console.error('❌ Error generating player AI insights:', error);
+      }
+    });
+  }
+
+  generateDuoInsights() {
+    if (!this.summary || !this.selectedTeammate) {
+      this.duoAIError = 'Missing duo information';
+      return;
+    }
+
+    this.loadingDuoAI = true;
+    this.duoAIError = '';
+    this.duoAIInsights = '';
+
+    this.riotApiService.fetchDuoAIInsights({
+      puuidA: this.summary.puuid,
+      puuidB: this.selectedTeammate.puuid,
+      region: this.summary.region
+    }).subscribe({
+      next: (response) => {
+        this.duoAIInsights = response.text;
+        this.loadingDuoAI = false;
+        console.log('✅ Duo AI insights loaded');
+      },
+      error: (error) => {
+        this.duoAIError = error.error?.message || error.message || 'Failed to generate AI insights';
+        this.loadingDuoAI = false;
+        console.error('❌ Error generating duo AI insights:', error);
+      }
+    });
+  }
+
+  getDuoWinRate(): number {
+    if (!this.duoSummary || this.duoSummary.sampleSize === 0) return 0;
+    return Math.round((this.duoSummary.wins / this.duoSummary.sampleSize) * 100);
   }
 
   getQueueName(queueId: number): string {

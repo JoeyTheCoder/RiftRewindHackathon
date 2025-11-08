@@ -1,4 +1,5 @@
-const { execSync } = require('child_process');
+const fs = require('fs').promises;
+const path = require('path');
 
 /**
  * Generate duo summary from cached match data
@@ -16,33 +17,21 @@ async function generateDuoSummary(params) {
 
   console.log(`📊 Generating duo summary for ${puuidA.substring(0, 8)}... + ${puuidB.substring(0, 8)}...`);
 
-  // Convert to WSL path and read matches file
-  const wslPath = matchesDir.replace(/\\/g, '/').replace(/^([A-Z]):/, (_, drive) => 
-    `/mnt/${drive.toLowerCase()}`
-  );
-
   // Find matches file
-  let filesOutput;
+  let files;
   try {
-    filesOutput = execSync(`wsl ls "${wslPath}"`, { encoding: 'utf8' });
+    files = await fs.readdir(matchesDir);
   } catch (error) {
     throw new Error(`Failed to list files in directory: ${error.message}`);
   }
-
-  const files = filesOutput.trim().split('\n').filter(f => f);
   const matchesFile = files.find(f => f.startsWith('matches_') && !f.includes('summary'));
 
   if (!matchesFile) {
     throw new Error('No matches file found');
   }
 
-  // Read matches data via WSL
-  const matchesData = JSON.parse(
-    execSync(`wsl cat "${wslPath}/${matchesFile}"`, { 
-      encoding: 'utf8', 
-      maxBuffer: 50 * 1024 * 1024 
-    })
-  );
+  // Read matches data
+  const matchesData = JSON.parse(await fs.readFile(path.join(matchesDir, matchesFile), 'utf8'));
 
   // Filter to ranked matches only
   const rankedMatches = matchesData.filter(match => {
@@ -91,6 +80,7 @@ async function generateDuoSummary(params) {
   const championPairCounts = {};
   const rolePairCounts = {};
   const patchCounts = {};
+  const sideCounts = { blue: 0, red: 0 };
   
   let totalGameDuration = 0;
   let totalCombinedKA = 0;
@@ -144,6 +134,10 @@ async function generateDuoSummary(params) {
 
     // Game duration
     totalGameDuration += info.gameDuration || 0;
+
+    // Track side (blue=100, red=200)
+    const side = playerA.teamId === 100 ? 'blue' : 'red';
+    sideCounts[side]++;
 
     // Patch tracking
     const version = info.gameVersion || '';
@@ -207,6 +201,10 @@ async function generateDuoSummary(params) {
   // Game texture
   summary.gameTexture = {
     avgGameDurationMin: Math.round((totalGameDuration / matchCount / 60) * 10) / 10,
+    sidePreference: {
+      blue: sideCounts.blue,
+      red: sideCounts.red
+    },
     byPatch: Object.entries(patchCounts)
       .map(([patch, data]) => ({ patch, games: data.games, wins: data.wins }))
       .sort((a, b) => b.games - a.games)
