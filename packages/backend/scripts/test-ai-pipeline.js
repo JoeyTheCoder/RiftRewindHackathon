@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Smoke test for AI insights pipeline
+ * Smoke test for the local insights pipeline.
  * Usage: node scripts/test-ai-pipeline.js [jobId]
  */
 
@@ -157,11 +157,11 @@ async function testDuoSummary(jobId) {
   }
 }
 
-async function testBedrockFunctions() {
-  log('\n🤖 Testing Bedrock functions...', 'yellow');
+async function testInsightsFunctions() {
+  log('\n🤖 Testing insights generator...', 'yellow');
   
   try {
-    const { generatePlayerInsights, generateDuoInsights } = require('../utils/bedrock');
+    const { generatePlayerInsights, generateDuoInsights } = require('../utils/insights');
     
     if (typeof generatePlayerInsights !== 'function') {
       fail('generatePlayerInsights not exported');
@@ -175,9 +175,6 @@ async function testBedrockFunctions() {
     }
     pass('generateDuoInsights exported');
     
-    // Test with stub when disabled
-    process.env.ENABLE_BEDROCK = 'false';
-    
     const mockSummary = {
       riotId: { gameName: 'Test', tagLine: 'EUW' },
       region: 'EUW',
@@ -190,10 +187,10 @@ async function testBedrockFunctions() {
     };
     
     const playerText = await generatePlayerInsights(mockSummary);
-    if (playerText.includes('disabled')) {
-      pass('generatePlayerInsights returns stub when disabled');
+    if (playerText.includes('Test#EUW')) {
+      pass('generatePlayerInsights returns a narrative summary');
     } else {
-      fail('generatePlayerInsights should return stub when disabled');
+      fail('generatePlayerInsights should return a narrative summary');
       return false;
     }
     
@@ -208,16 +205,16 @@ async function testBedrockFunctions() {
     };
     
     const duoText = await generateDuoInsights(mockDuo);
-    if (duoText.includes('disabled')) {
-      pass('generateDuoInsights returns stub when disabled');
+    if (duoText.includes('Player A') || duoText.includes('Player B')) {
+      pass('generateDuoInsights returns a narrative summary');
     } else {
-      fail('generateDuoInsights should return stub when disabled');
+      fail('generateDuoInsights should return a narrative summary');
       return false;
     }
     
     return true;
   } catch (error) {
-    fail(`Error testing Bedrock functions: ${error.message}`);
+    fail(`Error testing insights generator: ${error.message}`);
     return false;
   }
 }
@@ -233,33 +230,14 @@ async function testEnvValidation() {
     
     // Set minimal required env
     process.env.NODE_ENV = 'development';
-    process.env.FRONTEND_URL = 'http://localhost:4200';
-    process.env.DATA_BACKEND = 'fs';
     process.env.RIOT_API_KEY = 'RGAPI-test';
-    process.env.ENABLE_BEDROCK = 'false';
     
     const config = validate();
-    
-    if (config.ENABLE_BEDROCK !== false) {
-      fail('ENABLE_BEDROCK should be false');
+    if (!config.RIOT_API_KEY) {
+      fail('RIOT_API_KEY should be present');
       return false;
     }
     pass('Environment validation working');
-    
-    // Test Bedrock validation
-    process.env.ENABLE_BEDROCK = 'true';
-    try {
-      validate();
-      fail('Should require BEDROCK_REGION when enabled');
-      return false;
-    } catch (e) {
-      if (e.code === 'ENV_MISSING_BEDROCK') {
-        pass('Bedrock validation working');
-      } else {
-        fail(`Unexpected error: ${e.code}`);
-        return false;
-      }
-    }
     
     // Restore env
     process.env = originalEnv;
@@ -273,7 +251,7 @@ async function testEnvValidation() {
 
 async function main() {
   log('\n╔═══════════════════════════════════════╗', 'blue');
-  log('║  AI Insights Pipeline Smoke Test     ║', 'blue');
+  log('║  Local Insights Pipeline Smoke Test  ║', 'blue');
   log('╚═══════════════════════════════════════╝', 'blue');
   
   const jobId = process.argv[2];
@@ -294,7 +272,7 @@ async function main() {
   
   // Run tests
   results.push(await testEnvValidation());
-  results.push(await testBedrockFunctions());
+  results.push(await testInsightsFunctions());
   results.push(await testPlayerSummary(jobId));
   results.push(await testDuoSummary(jobId));
   
@@ -305,7 +283,7 @@ async function main() {
   log('\n' + '═'.repeat(40), 'blue');
   if (passed === total) {
     log(`✓ All ${total} tests passed!`, 'green');
-    log('\n🚀 AI Insights pipeline is ready for deployment', 'blue');
+    log('\n🚀 Local insights pipeline is ready for deployment', 'blue');
     process.exit(0);
   } else {
     log(`✗ ${total - passed} of ${total} tests failed`, 'red');

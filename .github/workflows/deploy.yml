@@ -1,0 +1,87 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate backend boot configuration
+        env:
+          NODE_ENV: production
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          DATA_DIR: data
+        run: pnpm --filter ./packages/backend test:boot
+
+      - name: Build frontend
+        run: pnpm --filter ./packages/frontend build
+
+      - name: Package frontend release
+        run: tar -czf frontend-release.tar.gz -C packages/frontend/dist/duo-frontend .
+
+      - name: Package backend release
+        run: tar --exclude='packages/backend/.env' --exclude='packages/backend/data' --exclude='packages/backend/node_modules' -czf backend-release.tar.gz package.json pnpm-lock.yaml pnpm-workspace.yaml packages/backend
+
+      - name: Upload release artifacts
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: frontend-release.tar.gz,backend-release.tar.gz
+          target: /tmp/thats-my-duo-deploy
+
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          APP_ROOT: ${{ secrets.APP_ROOT }}
+          FRONTEND_TARGET_DIR: ${{ secrets.FRONTEND_TARGET_DIR }}
+          BACKEND_ENV_FILE: ${{ secrets.BACKEND_ENV_FILE }}
+          BACKEND_RESTART_COMMAND: ${{ secrets.BACKEND_RESTART_COMMAND }}
+          RELEASE_SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: APP_ROOT,FRONTEND_TARGET_DIR,BACKEND_ENV_FILE,BACKEND_RESTART_COMMAND,RELEASE_SHA
+          script: |
+            set -eu
+            RELEASE_DIR="$APP_ROOT/releases/$RELEASE_SHA"
+            mkdir -p "$RELEASE_DIR" "$APP_ROOT/shared/data" "$APP_ROOT/releases" "$FRONTEND_TARGET_DIR"
+            tar -xzf /tmp/thats-my-duo-deploy/backend-release.tar.gz -C "$RELEASE_DIR"
+            rm -rf "$FRONTEND_TARGET_DIR"/*
+            tar -xzf /tmp/thats-my-duo-deploy/frontend-release.tar.gz -C "$FRONTEND_TARGET_DIR"
+            printf '%s\n' "$BACKEND_ENV_FILE" > "$APP_ROOT/shared/backend.env"
+            rm -rf "$RELEASE_DIR/packages/backend/data"
+            ln -sfn "$APP_ROOT/shared/backend.env" "$RELEASE_DIR/packages/backend/.env"
+            ln -sfn "$APP_ROOT/shared/data" "$RELEASE_DIR/packages/backend/data"
+            cd "$RELEASE_DIR"
+            pnpm install --frozen-lockfile --prod --filter ./packages/backend...
+            ln -sfn "$RELEASE_DIR" "$APP_ROOT/current"
+            sh -lc "$BACKEND_RESTART_COMMAND"

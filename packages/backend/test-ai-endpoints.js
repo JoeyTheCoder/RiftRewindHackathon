@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Quick test script for AI insights endpoints
+ * Quick test script for local insights endpoints.
  * Run: node test-ai-endpoints.js
  */
 
@@ -58,7 +58,7 @@ async function testPlayerAI() {
     console.log('Response:', JSON.stringify(response.body, null, 2));
     
     if (response.status === 200 && response.body.text) {
-      console.log('✅ Player AI endpoint works!');
+      console.log('✅ Player insights endpoint works!');
       console.log('\nGenerated Insights:');
       console.log('─'.repeat(60));
       console.log(response.body.text);
@@ -90,7 +90,7 @@ async function testDuoAI() {
     console.log('Response:', JSON.stringify(response.body, null, 2));
     
     if (response.status === 200 && response.body.text) {
-      console.log('✅ Duo AI endpoint works!');
+      console.log('✅ Duo insights endpoint works!');
       console.log('\nGenerated Insights:');
       console.log('─'.repeat(60));
       console.log(response.body.text);
@@ -104,7 +104,7 @@ async function testDuoAI() {
 }
 
 async function runTests() {
-  console.log('🚀 AI Insights Endpoint Test Suite');
+  console.log('🚀 Insights Endpoint Test Suite');
   console.log('═'.repeat(60));
   console.log(`Base URL: ${BASE_URL}`);
   console.log(`Test Job ID: ${TEST_JOB_ID}`);
@@ -117,9 +117,8 @@ async function runTests() {
   console.log('\n═'.repeat(60));
   console.log('✅ Test suite complete!');
   console.log('\n💡 Notes:');
-  console.log('   - If ENABLE_BEDROCK=false, endpoints return fallback message');
-  console.log('   - If ENABLE_BEDROCK=true, endpoints return AI-generated text');
-  console.log('   - Both behaviors are correct and expected');
+  console.log('   - These endpoints now generate stat-driven narrative summaries locally');
+  console.log('   - No cloud AI provider is required for the production portfolio version');
 }
 
 // Run tests

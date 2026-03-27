@@ -94,9 +94,6 @@ public
 # Vuepress build output
 .vuepress/dist
 
-# Serverless directories
-.serverless/
-
 # FuseBox cache
 .fusebox/
 
@@ -128,10 +125,6 @@ packages/backend/*.log
 # Shared packages build output
 packages/shared/*/dist/
 
-# AI Service specific
-packages/ai-service/dist/
-packages/ai-service/.aws-sam/
-
 # Infrastructure specific
 packages/infra/.terraform/
 packages/infra/terraform.tfstate*
@@ -160,11 +153,6 @@ Thumbs.db
 
 # Log files
 *.log
-
-# AWS specific
-.aws/
-.aws-sam/
-samconfig.toml
 
 # Local development
 .local/

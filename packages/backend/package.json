@@ -14,10 +14,6 @@
     "test:boot": "node -e \"require('./utils/env').validateAndPrint()\""
   },
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.679.0",
-    "@aws-sdk/client-s3": "^3.919.0",
-    "@aws-sdk/client-secrets-manager": "^3.920.0",
-    "@vendia/serverless-express": "^4.12.6",
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
