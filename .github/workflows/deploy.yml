@@ -40,7 +40,7 @@ jobs:
         run: pnpm --filter ./packages/frontend build
 
       - name: Package frontend release
-        run: tar -czf frontend-release.tar.gz -C packages/frontend/dist/duo-frontend .
+        run: tar -czf frontend-release.tar.gz -C packages/frontend/dist/duo-frontend/browser .
 
       - name: Package backend release
         run: |
