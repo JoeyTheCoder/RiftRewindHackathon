@@ -43,7 +43,11 @@ jobs:
         run: tar -czf frontend-release.tar.gz -C packages/frontend/dist/duo-frontend .
 
       - name: Package backend release
-        run: tar --exclude='packages/backend/.env' --exclude='packages/backend/data' --exclude='packages/backend/node_modules' -czf backend-release.tar.gz package.json pnpm-lock.yaml pnpm-workspace.yaml packages/backend
+        run: |
+          rm -rf backend-release
+          mkdir -p backend-release/packages
+          pnpm --filter ./packages/backend deploy --prod backend-release/packages/backend
+          tar -czf backend-release.tar.gz -C backend-release .
 
       - name: Upload release artifacts
         uses: appleboy/scp-action@v0.1.7
@@ -80,7 +84,5 @@ jobs:
             rm -rf "$RELEASE_DIR/packages/backend/data"
             ln -sfn "$APP_ROOT/shared/backend.env" "$RELEASE_DIR/packages/backend/.env"
             ln -sfn "$APP_ROOT/shared/data" "$RELEASE_DIR/packages/backend/data"
-            cd "$RELEASE_DIR"
-            pnpm install --no-frozen-lockfile --prod --filter ./packages/backend...
             ln -sfn "$RELEASE_DIR" "$APP_ROOT/current"
             sh -lc "$BACKEND_RESTART_COMMAND"
