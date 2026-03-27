@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 class JobManager {
   constructor(dataDir, storage) {
@@ -15,7 +15,7 @@ class JobManager {
    * @returns {Promise<string>} - Job ID
    */
   async createJob(jobData) {
-    const jobId = uuidv4();
+    const jobId = randomUUID();
     const job = {
       id: jobId,
       status: 'queued',
