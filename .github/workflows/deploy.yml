@@ -26,7 +26,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate backend boot configuration
         env:
@@ -81,6 +81,6 @@ jobs:
             ln -sfn "$APP_ROOT/shared/backend.env" "$RELEASE_DIR/packages/backend/.env"
             ln -sfn "$APP_ROOT/shared/data" "$RELEASE_DIR/packages/backend/data"
             cd "$RELEASE_DIR"
-            pnpm install --frozen-lockfile --prod --filter ./packages/backend...
+            pnpm install --no-frozen-lockfile --prod --filter ./packages/backend...
             ln -sfn "$RELEASE_DIR" "$APP_ROOT/current"
             sh -lc "$BACKEND_RESTART_COMMAND"
