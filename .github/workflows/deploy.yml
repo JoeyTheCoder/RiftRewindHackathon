@@ -46,7 +46,7 @@ jobs:
         run: |
           rm -rf backend-release
           mkdir -p backend-release/packages
-          pnpm --filter ./packages/backend deploy --prod backend-release/packages/backend
+          pnpm --filter ./packages/backend deploy --legacy --prod backend-release/packages/backend
           tar -czf backend-release.tar.gz -C backend-release .
 
       - name: Upload release artifacts
