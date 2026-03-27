@@ -36,3 +36,4 @@ jobs:
 
       - name: Build frontend
         run: pnpm --filter ./packages/frontend build
+        
