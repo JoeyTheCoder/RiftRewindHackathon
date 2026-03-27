@@ -1,134 +1,129 @@
-# 🎮 That’s My Duo  
-### Rift Rewind Hackathon 2025 – Riot Games × AWS  
-**Developer:** Sapphirix (Switzerland)  
-**Status:** ✅ Complete & Deployed  
-**🌐 Live Site:** [https://tmd.sapphirix.ch](https://tmd.sapphirix.ch)
+# That's My Duo
 
----
+Rift Rewind Hackathon 2025 project, adapted for long-term self-hosting.
 
-## 🧠 Overview
+## Overview
 
-**That’s My Duo** is an AI-powered League of Legends companion that analyzes how you and your friends play together.  
-It fetches real match data from the Riot Games API, calculates detailed synergy metrics, and generates short, narrative insights using **AWS Bedrock (Claude 3 Haiku)** — helping players reflect, learn, and celebrate their duo performance.
+That's My Duo is a League of Legends companion app that analyzes how two players perform together.
+It fetches live Riot API data, computes player and duo metrics, and turns those metrics into readable narrative summaries for a portfolio-friendly deployment that no longer depends on AWS.
 
-> *“Who’s your perfect duo? That’s My Duo finds out.”*
+## Stack
 
----
+- Frontend: Angular 19, Tailwind CSS 4, RxJS
+- Backend: Node.js 20, Express 5
+- Data source: Riot Account-V1, Summoner-V4, Match-V5 APIs
+- Deployment target: standard Linux webserver with Nginx or Apache in front of the Node backend
+- CI/CD: GitHub Actions with SSH-based deploy
 
-## ✨ Features
+## What Changed After The Hackathon
 
-- 🧩 **Duo Synergy Analysis** — winrate, champion pairs, role effectiveness, vision, and damage contribution  
-- 🧠 **AI-Generated Insights** — 3-sentence summaries powered by Claude 3 Haiku via AWS Bedrock  
-- 📈 **Player Statistics** — match history, top champions, roles, and frequent teammates  
-- 📱 **Mobile-Responsive Design** — built with Angular 19 + Tailwind CSS 4  
-- ☁️ **Serverless Deployment** — AWS Lambda + API Gateway + S3 + Cloudflare CDN  
-- 🧮 **Job-Based Processing** — avoids Lambda timeouts for large match histories  
+- Removed AWS Lambda, API Gateway, S3, Secrets Manager, Bedrock, and SAM deployment files
+- Switched the backend to filesystem-only storage for jobs and cached match data
+- Switched production frontend API routing to same-origin /api requests
+- Replaced Bedrock summaries with a local stat-driven narrative generator
+- Added GitHub Actions workflows for CI and SSH deployment to a regular webserver
 
----
+## Architecture
 
-## 🧱 Architecture Overview
-
-```
-Browser (Angular) → Cloudflare CDN → S3 (Frontend)
-        ↓ HTTPS
- API Gateway (HTTP) → Lambda (Express.js) → Riot API
-                                   ↓
-                               AWS S3 / Secrets Manager / Bedrock
+```text
+Browser -> Nginx/Apache -> Angular static files
+                     \
+                      -> /api -> Express backend -> Riot API
+                                     \
+                                      -> local data/jobs cache
 ```
 
-**Frontend:** Angular 19, Tailwind CSS 4, RxJS  
-**Backend:** Node.js 20 / Express 5 (serverless-express)  
-**AI:** AWS Bedrock – Claude 3 Haiku  
-**Infra:** AWS SAM template (Lambda + API Gateway + S3 + Secrets Manager)
+## Local Development
 
----
-
-## ☁️ AWS Services Used
-
-| Service | Purpose |
-|----------|----------|
-| **AWS Lambda** | Serverless execution of the backend API |
-| **Amazon API Gateway (HTTP API)** | Exposes endpoints for the frontend |
-| **Amazon S3** | Hosts static frontend & stores cached match data |
-| **AWS Secrets Manager** | Securely stores Riot API key |
-| **AWS Bedrock (Claude 3 Haiku)** | Generates narrative duo insights |
-| **AWS SAM / CloudFormation** | Infrastructure as code deployment |
-| **Cloudflare CDN** | Global delivery + custom domain for frontend |
-
----
-
-## 🧮 Methodology
-
-1. **Data Ingestion** – Match history fetched from the Riot Games API (up to 100 games).  
-2. **Statistical Analysis** – Duo synergy metrics computed: combined K+A, kill participation, role and champion pairings, vision, damage share, and win rates.  
-3. **AI Narration** – Metrics formatted into structured prompts and sent to **Claude 3 Haiku** through **AWS Bedrock Runtime**.  
-4. **Frontend Visualization** – Results rendered in a clean, mobile-friendly interface with champion icons, progress stats, and AI-written insights.
-
----
-
-## 📊 Example Insight
-
-> *“This duo thrives on aggressive bot-lane play, averaging 28 combined kills + assists per game.  
-> Their strongest combo, **Jinx + Thresh**, wins 80% of matches, with superior vision control.  
-> They excel when games stay under 30 minutes — keep the pace fast!”*
-
----
-
-## 💡 What I Learned
-
-- **Lambda timeout** limits solved with async job system.  
-- **Claude 3 Haiku** delivers fast, cheap narrative generation.  
-- **Unified FS/S3 storage layer** made local development seamless.  
-- AWS SAM greatly simplified deploying and linking all services.  
-
----
-
-## 🚀 Quick Start (Local)
+1. Install dependencies.
 
 ```bash
-# 1. Clone
-git clone https://github.com/<yourusername>/thats-my-duo.git
-cd thats-my-duo
-
-# 2. Install
 pnpm install
+```
 
-# 3. Backend
+2. Configure backend env.
+
+```bash
 cd packages/backend
 cp .env.example .env
-# Fill in RIOT_API_KEY=RGAPI-xxxxx
-pnpm dev
-
-# 4. Frontend
-cd ../frontend
-pnpm dev
-# Open http://localhost:4200
 ```
 
----
+3. Set at least these values in packages/backend/.env.
 
-## 🌐 Live Demo
-
-**App:** [https://tmd.sapphirix.ch](https://tmd.sapphirix.ch)  
-**Video:** [YouTube – That’s My Duo (Demo)](https://youtu.be/0YB8-iK7B9I)  
-
----
-
-## ⚖️ License
-
-This project is open-source under the **MIT License**.  
-See the [LICENSE](./LICENSE) file for details.
-
----
-
-## 🏷️ AWS Resource Tag
-
-```
-Key:   rift-rewind-hackathon
-Value: 2025
+```env
+NODE_ENV=development
+PORT=3000
+RIOT_API_KEY=RGAPI-your-key
+FRONTEND_URL=http://localhost:4200
+DATA_DIR=data
+LOG_LEVEL=info
 ```
 
----
+4. Start the backend and frontend.
 
-### 👏 Built for Rift Rewind Hackathon 2025  
-*Turning League data into meaningful, AI-powered stories.*
+```bash
+pnpm --filter ./packages/backend dev
+pnpm --filter ./packages/frontend dev
+```
+
+5. Open http://localhost:4200.
+
+## Deployment Model
+
+The production build expects the frontend and backend to share one origin.
+Serve the Angular build as static files and reverse proxy /api to the Node app running on the same server.
+
+Reference files included in this repository:
+
+- deploy/nginx.thats-my-duo.conf.example
+- deploy/thats-my-duo.service.example
+- .github/workflows/ci.yml
+- .github/workflows/deploy.yml
+
+## GitHub Actions Secrets
+
+The deploy workflow expects these repository secrets:
+
+- SSH_HOST
+- SSH_USER
+- SSH_PORT
+- SSH_PRIVATE_KEY
+- FRONTEND_TARGET_DIR
+- APP_ROOT
+- BACKEND_ENV_FILE
+- BACKEND_RESTART_COMMAND
+- RIOT_API_KEY
+- FRONTEND_URL
+
+Example BACKEND_ENV_FILE value:
+
+```env
+NODE_ENV=production
+PORT=3000
+RIOT_API_KEY=RGAPI-your-production-key
+FRONTEND_URL=https://your-domain.example
+DATA_DIR=data
+LOG_LEVEL=info
+```
+
+Example BACKEND_RESTART_COMMAND values:
+
+- sudo systemctl restart thats-my-duo
+- pm2 restart thats-my-duo
+
+## Riot API Notes
+
+- The Riot APIs used here are public HTTPS endpoints and do not depend on AWS.
+- What matters is outbound internet access from your server and a valid Riot API key.
+- Development keys expire every 24 hours.
+- Personal keys are not allowed for a public site.
+- A public portfolio deployment should use an approved production key if the app is accessible to other people.
+- Riot rate limits are enforced per region, so high traffic can still throttle your backend even on your own server.
+
+## Security Note
+
+If a real Riot API key was ever committed or shared during development, rotate it before publishing this repository or deploying the app.
+
+## License
+
+MIT. See LICENSE.

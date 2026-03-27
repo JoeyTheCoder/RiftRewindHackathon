@@ -1,0 +1,16 @@
+[Unit]
+Description=That's My Duo backend
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/thats-my-duo/current/packages/backend
+ExecStart=/usr/bin/node index.js
+Restart=always
+RestartSec=5
+EnvironmentFile=/srv/thats-my-duo/shared/backend.env
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

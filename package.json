@@ -11,14 +11,13 @@
     "clean": "pnpm --recursive --filter \"./packages/*\" clean",
     "start": "pnpm --filter ./packages/backend start",
     "test:boot": "pnpm --filter ./packages/backend test:boot",
-    "deploy:api": "sam build && sam deploy --guided",
     "build:frontend": "cd packages/frontend && pnpm build"
   },
   "keywords": [
     "league-of-legends",
     "riot-api",
     "duo-analysis",
-    "aws-bedrock",
+    "self-hosted",
     "gaming-analytics"
   ],
   "author": "Your Name",
